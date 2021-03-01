@@ -1,5 +1,8 @@
 {
     "variants": {
-        "": { "model": "plaingrinder:block/handle" }
+			"facing=north":	{ "model": "plaingrinder:block/handle"},
+			"facing=east":	{ "model": "plaingrinder:block/handle", "y": 90 },
+			"facing=south":	{ "model": "plaingrinder:block/handle" , "y": 180 },
+			"facing=west":	{ "model": "plaingrinder:block/handle", "y": 270 }
     }
 }
