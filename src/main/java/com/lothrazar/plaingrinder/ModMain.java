@@ -1,6 +1,8 @@
 package com.lothrazar.plaingrinder;
 
+import com.lothrazar.plaingrinder.grind.ScreenGrinder;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,5 +33,6 @@ public class ModMain {
 
   private void setupClient(final FMLClientSetupEvent event) {
     //for client side only setup
+    ScreenManager.registerFactory(ModRegistry.ctrgrinder, ScreenGrinder::new);
   }
 }
