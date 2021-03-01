@@ -21,19 +21,28 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileGrinder extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
+  private static final int STAGE_DONE = 4;
   public static final String NBTINV = "inv";
   ItemStackHandler inputSlots = new ItemStackHandler(1);
   ItemStackHandler outputSlots = new ItemStackHandler(1);
   private ItemStackHandlerWrapper inventory = new ItemStackHandlerWrapper(inputSlots, outputSlots);
   private LazyOptional<IItemHandler> inventoryCap = LazyOptional.of(() -> inventory);
+  private int stage = 0;
 
   public TileGrinder() {
-    super(ModRegistry.tilegrinder);
+    super(ModRegistry.T_GRINDER);
   }
 
   @Override
   public void tick() {
-    //
+    //do we process
+    if (stage == STAGE_DONE) {
+      this.doProcess();
+    }
+  }
+
+  private void doProcess() {
+    // TODO Auto-generated method stub
   }
 
   @Override

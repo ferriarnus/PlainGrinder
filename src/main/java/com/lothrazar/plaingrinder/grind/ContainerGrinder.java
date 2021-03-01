@@ -19,7 +19,7 @@ public class ContainerGrinder extends Container {
   private TileGrinder tile;
 
   public ContainerGrinder(int windowId, World world, BlockPos pos, PlayerInventory inv, PlayerEntity player) {
-    this(ModRegistry.ctrgrinder, windowId);
+    this(ModRegistry.CTR_GRINDER, windowId);
     tile = (TileGrinder) world.getTileEntity(pos);
     //    this.playerEntity = player; 
     addSlot(new SlotItemHandler(tile.inputSlots, 0, 24, 40));

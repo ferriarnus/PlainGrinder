@@ -33,6 +33,6 @@ public class ModMain {
 
   private void setupClient(final FMLClientSetupEvent event) {
     //for client side only setup
-    ScreenManager.registerFactory(ModRegistry.ctrgrinder, ScreenGrinder::new);
+    ScreenManager.registerFactory(ModRegistry.CTR_GRINDER, ScreenGrinder::new);
   }
 }

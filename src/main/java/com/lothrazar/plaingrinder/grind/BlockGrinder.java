@@ -78,7 +78,6 @@ public class BlockGrinder extends Block {
   @OnlyIn(Dist.CLIENT)
   public void addInformation(ItemStack stack, IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     TranslationTextComponent t = new TranslationTextComponent(getTranslationKey() + ".tooltip");
-    t.mergeStyle(TextFormatting.GRAY);
-    tooltip.add(t);
+    tooltip.add(t.mergeStyle(TextFormatting.GRAY));
   }
 }
