@@ -1,9 +1,15 @@
 package com.lothrazar.plaingrinder;
 
+import com.lothrazar.cyclic.registry.RecipeRegistry;
+import com.lothrazar.plaingrinder.grind.GrindRecipe;
+import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import com.lothrazar.plaingrinder.grind.ScreenGrinder;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -21,6 +27,8 @@ public class ModMain {
     ConfigManager.setup();
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+    //https://github.com/Minecraft-Forge-Tutorials/Custom-Json-Recipes/blob/master/src/main/java/net/darkhax/customrecipeexample/CustomRecipesMod.java
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, RecipeRegistry::registerRecipeSerializers);
   }
 
   private void setup(final FMLCommonSetupEvent event) {
@@ -35,5 +43,10 @@ public class ModMain {
   private void setupClient(final FMLClientSetupEvent event) {
     //for client side only setup
     ScreenManager.registerFactory(ModRegistry.CTR_GRINDER, ScreenGrinder::new);
+  }
+
+  public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {
+    Registry.register(Registry.RECIPE_TYPE, ModRecipeType.GRIND.toString(), ModRecipeType.GRIND);
+    event.getRegistry().register(GrindRecipe.SERIALIZER);
   }
 }
