@@ -27,10 +27,25 @@ public class ScreenGrinder extends ContainerScreen<ContainerGrinder> {
     this.drawBackground(ms, INVENTORY);
   }
 
+  @Override
+  public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+    this.renderBackground(ms);
+    super.render(ms, mouseX, mouseY, partialTicks);
+  }
+
   protected void drawBackground(MatrixStack ms, ResourceLocation gui) {
     this.minecraft.getTextureManager().bindTexture(gui);
     int relX = (this.width - this.xSize) / 2;
     int relY = (this.height - this.ySize) / 2;
     this.blit(ms, relX, relY, 0, 0, this.xSize, this.ySize);
+    //
+    this.drawSlot(ms, 54, 34);
+    this.drawSlot(ms, 108, 34);
+  }
+
+  protected void drawSlot(MatrixStack ms, int x, int y) {
+    final int size = 18;
+    this.minecraft.getTextureManager().bindTexture(SLOT);
+    blit(ms, guiLeft + x, guiTop + y, 0, 0, size, size, size, size);
   }
 }

@@ -21,7 +21,7 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
   private static final Set<String> HASHES = new HashSet<>();
   public static final Set<GrindRecipe> RECIPES = new HashSet<>();
   private final ResourceLocation id;
-  private Ingredient input = Ingredient.EMPTY;
+  public Ingredient input = Ingredient.EMPTY;
   private ItemStack result = ItemStack.EMPTY;
 
   public GrindRecipe(ResourceLocation id, Ingredient input, ItemStack result) {

@@ -15,7 +15,7 @@ public class ContainerGrinder extends Container {
 
   public static final int PLAYERSIZE = 4 * 9;
   protected int startInv = 0;
-  protected int endInv = 0;
+  protected int endInv = 2;
   private TileGrinder tile;
   protected PlayerEntity playerEntity;
   protected PlayerInventory playerInventory;
