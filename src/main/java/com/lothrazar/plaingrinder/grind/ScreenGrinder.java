@@ -1,6 +1,5 @@
 package com.lothrazar.plaingrinder.grind;
 
-import com.lothrazar.cyclic.registry.TextureRegistry;
 import com.lothrazar.plaingrinder.ModMain;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -11,6 +10,7 @@ import net.minecraft.util.text.ITextComponent;
 public class ScreenGrinder extends ContainerScreen<ContainerGrinder> {
 
   public static final ResourceLocation INVENTORY = new ResourceLocation(ModMain.MODID, "textures/gui/inventory.png");
+  public static final ResourceLocation SLOT = new ResourceLocation(ModMain.MODID, "textures/gui/slot.png");
 
   public ScreenGrinder(ContainerGrinder screenContainer, PlayerInventory inv, ITextComponent titleIn) {
     super(screenContainer, inv, titleIn);
@@ -24,7 +24,7 @@ public class ScreenGrinder extends ContainerScreen<ContainerGrinder> {
   @Override
   protected void drawGuiContainerBackgroundLayer(MatrixStack ms, float partialTicks, int x, int y) {
     //    super.drawGuiContainerForegroundLayer(ms, x, y);
-    this.drawBackground(ms, TextureRegistry.INVENTORY);
+    this.drawBackground(ms, INVENTORY);
   }
 
   protected void drawBackground(MatrixStack ms, ResourceLocation gui) {
