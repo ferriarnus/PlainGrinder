@@ -1,5 +1,6 @@
-package com.lothrazar.plaingrinder;
+package com.lothrazar.plaingrinder.data;
 
+import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.grind.TileGrinder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -19,7 +22,7 @@ public class GrindEvents {
     PlayerEntity player = event.getPlayer();
     ItemStack held = player.getHeldItem(event.getHand());
     World world = player.getEntityWorld();
-    if (!held.isEmpty() || world.isRemote || event.getHand() == Hand.OFF_HAND) {
+    if (!held.isEmpty() || event.getHand() == Hand.OFF_HAND) {
       return;
     }
     BlockPos pos = event.getPos();
@@ -37,8 +40,11 @@ public class GrindEvents {
           //can we?
           tile.incrementGrind();
           // and state
-          Direction old = state.get(BlockStateProperties.HORIZONTAL_FACING);
-          world.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, old.rotateYCCW()));
+          if (world.isRemote == false) {
+            Direction old = state.get(BlockStateProperties.HORIZONTAL_FACING);
+            world.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, old.rotateYCCW()));
+          }
+          player.swingArm(event.getHand());
         }
       }
     }

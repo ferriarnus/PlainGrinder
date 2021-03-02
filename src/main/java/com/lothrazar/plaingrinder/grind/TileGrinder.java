@@ -1,6 +1,5 @@
 package com.lothrazar.plaingrinder.grind;
 
-import com.lothrazar.plaingrinder.ModMain;
 import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.data.ItemStackHandlerWrapper;
 import net.minecraft.block.BlockState;
@@ -45,18 +44,54 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
       timer = 0;
     }
     //do we process
-    if (stage == STAGE_DONE) {
+    if (canProcessOre()) {
       this.doProcess();
     }
+  }
+
+  public boolean canProcessOre() {
+    return stage == STAGE_DONE;
   }
 
   private void doProcess() {
     stage = 0;
     ItemStack input = this.inputSlots.getStackInSlot(0);
-    ModMain.LOGGER.info("doProcess complete, stage reset" + input);
     if (input.isEmpty()) {
       return;
     }
+    GrindRecipe currentRecipe = this.findMatchingRecipe();
+    if (currentRecipe != null && this.tryProcessRecipe(currentRecipe)) {
+      //we did it
+      //pay all costs, RF etc
+      if (world.isRemote == false) {
+        //server so process
+        this.inputSlots.getStackInSlot(0).shrink(1);
+        //and then insert it for real 
+        this.outputSlots.insertItem(0, currentRecipe.getCraftingResult(this), false);
+        //and sound on the trigger
+        world.playEvent((PlayerEntity) null, 1042, pos, 0);
+      }
+    }
+  }
+
+  private boolean tryProcessRecipe(GrindRecipe currentRecipe) {
+    // ok so do the thing
+    ItemStack result = currentRecipe.getCraftingResult(this);
+    //does it match? does it fit into the output slot 
+    //insert in simulate mode. does it fit?
+    if (this.outputSlots.insertItem(0, result, true).isEmpty()) {
+      return true;
+    }
+    return false;
+  }
+
+  private GrindRecipe findMatchingRecipe() {
+    for (GrindRecipe rec : GrindRecipe.RECIPES) {
+      if (rec.matches(this, world)) {
+        return rec;
+      }
+    }
+    return null;
   }
 
   @Override

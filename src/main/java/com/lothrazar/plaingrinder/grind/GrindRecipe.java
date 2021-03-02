@@ -94,9 +94,6 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
         Ingredient inputFirst = Ingredient.deserialize(JSONUtils.getJsonObject(json, "input"));
         //
         ItemStack resultStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
-        //        JsonObject mix = json.get("mix").getAsJsonObject();
-        //        int count = mix.get("count").getAsInt();
-        //        String fluidId = JSONUtils.getString(mix, "fluid");
         r = new GrindRecipe(recipeId, inputFirst, resultStack);
         addRecipe(r);
         return r;

@@ -1,6 +1,6 @@
 package com.lothrazar.plaingrinder;
 
-import com.lothrazar.cyclic.registry.RecipeRegistry;
+import com.lothrazar.plaingrinder.data.GrindEvents;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
 import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import com.lothrazar.plaingrinder.grind.ScreenGrinder;
@@ -28,7 +28,7 @@ public class ModMain {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
     //https://github.com/Minecraft-Forge-Tutorials/Custom-Json-Recipes/blob/master/src/main/java/net/darkhax/customrecipeexample/CustomRecipesMod.java
-    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, RecipeRegistry::registerRecipeSerializers);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, ModMain::registerRecipeSerializers);
   }
 
   private void setup(final FMLCommonSetupEvent event) {

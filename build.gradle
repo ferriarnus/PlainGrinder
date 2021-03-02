@@ -15,7 +15,6 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'checkstyle'
-// apply plugin: 'org.spongepowered.mixin'
 
 import net.minecraftforge.gradle.common.task.SignJar
 import groovy.json.JsonSlurper
@@ -104,12 +103,6 @@ minecraft {
         }
     }
 }
-
-// mixin {
-//       add sourceSets.main, "lothrazarplaingrinder.refmap.json"
-//
-//       disableTargetValidator = false
-// }
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
