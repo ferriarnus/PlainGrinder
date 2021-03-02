@@ -4,7 +4,7 @@
     "tag": "forge:ores/quartz"
   },
   "result": {
-    "item": "plaingrinder:dust_quartz",
-    "count": 2
+    "item": "minecraft:quartz",
+    "count": 3
   }
 }

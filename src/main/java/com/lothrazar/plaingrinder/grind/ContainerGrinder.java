@@ -25,8 +25,8 @@ public class ContainerGrinder extends Container {
     this.playerEntity = player;
     this.playerInventory = inv;
     tile = (TileGrinder) world.getTileEntity(pos);
-    addSlot(new SlotItemHandler(tile.inputSlots, 0, 24, 40));
-    addSlot(new SlotItemHandler(tile.outputSlots, 0, 74, 40));
+    addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
+    addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
     layoutPlayerInventorySlots(8, 84);
   }
 

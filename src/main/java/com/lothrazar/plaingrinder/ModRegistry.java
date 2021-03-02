@@ -71,8 +71,9 @@ public class ModRegistry {
     r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_gold"));
     r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_iron"));
     r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_emerald"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_quartz"));
     r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_lapis"));
+    //    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_quartz"));
+    //    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_charcoal"));
   }
 
   @SubscribeEvent
