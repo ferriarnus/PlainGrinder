@@ -12,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,10 +26,9 @@ public class ModRegistry {
 
     @Override
     public ItemStack createIcon() {
-      return new ItemStack(ModRegistry.B_GRINDER);
+      return new ItemStack(ModRegistry.B_HANDLE);
     }
   };
-  //change Object to your Block/Item/whatever 
   @ObjectHolder(ModMain.MODID + ":handle")
   public static Block B_HANDLE;
   @ObjectHolder(ModMain.MODID + ":grinder")
@@ -43,8 +41,8 @@ public class ModRegistry {
   @SubscribeEvent
   public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
     IForgeRegistry<Block> r = event.getRegistry();
-    r.register(new BlockGrinder(Block.Properties.create(Material.ROCK)).setRegistryName("grinder"));
-    r.register(new BlockHandle(Block.Properties.create(Material.ROCK)).setRegistryName("handle"));
+    r.register(new BlockGrinder(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.9F)).setRegistryName("grinder"));
+    r.register(new BlockHandle(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.4F)).setRegistryName("handle"));
   }
 
   @SubscribeEvent
@@ -74,10 +72,5 @@ public class ModRegistry {
     r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_lapis"));
     //    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_quartz"));
     //    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_charcoal"));
-  }
-
-  @SubscribeEvent
-  public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-    //  IForgeRegistry<SoundEvent> r = event.getRegistry();
   }
 }
