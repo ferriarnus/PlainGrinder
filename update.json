@@ -1,10 +1,10 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/plain-grinder",
   "promos": {
-    "1.16.5-latest": "1.0.0",
-    "1.16.5-recommended": "1.0.0"
+    "1.16.5-latest": "0.0.1",
+    "1.16.5-recommended": "0.0.1"
   },
   "1.16.5": {
-    "1.0.0": "Release "
+    "0.0.1": "Release for testing"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cc",
+    "cc"
+  ],
+  "key": {
+    "c": {
+      "item": "plaingrinder:coal_dust"
+    }
+  },
+  "result": {
+    "item": "minecraft:coal_block",
+    "count": 1
+  }
+}
