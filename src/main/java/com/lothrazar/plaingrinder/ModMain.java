@@ -4,7 +4,6 @@ import com.lothrazar.plaingrinder.data.GrindEvents;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
 import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import com.lothrazar.plaingrinder.grind.ScreenGrinder;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.registry.Registry;
@@ -34,10 +33,6 @@ public class ModMain {
   private void setup(final FMLCommonSetupEvent event) {
     //now all blocks/items exist  
     MinecraftForge.EVENT_BUS.register(new GrindEvents());
-    if (ConfigManager.TESTING.get()) {
-      float test = Blocks.BEDROCK.getDefaultState().hardness;
-      ModMain.LOGGER.info("accesstransformer.cfg test bedrock hardness = " + test);
-    }
   }
 
   private void setupClient(final FMLClientSetupEvent event) {

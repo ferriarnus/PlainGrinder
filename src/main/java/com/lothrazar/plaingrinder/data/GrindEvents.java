@@ -36,11 +36,11 @@ public class GrindEvents {
         TileGrinder tile = (TileGrinder) world.getTileEntity(pos.down());
         if (tile.canGrind()) {
           //can we?
-          tile.incrementGrind();
           // and state
           if (world.isRemote == false) {
             Direction old = state.get(BlockStateProperties.HORIZONTAL_FACING);
             world.setBlockState(pos, state.with(BlockStateProperties.HORIZONTAL_FACING, old.rotateYCCW()));
+            tile.incrementGrind();
           }
           player.swingArm(event.getHand());
         }

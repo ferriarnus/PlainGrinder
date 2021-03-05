@@ -1,5 +1,6 @@
 package com.lothrazar.plaingrinder.grind;
 
+import com.lothrazar.plaingrinder.ConfigManager;
 import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.data.ItemStackHandlerWrapper;
 import net.minecraft.block.BlockState;
@@ -23,8 +24,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileGrinder extends TileEntity implements INamedContainerProvider, ITickableTileEntity, IInventory {
 
-  private static final int TIMER_DONE = 5;
-  private static final int STAGE_DONE = 4;
+  private static final int MULT_OF_MAX_STAGE_BREAKSTUFF = 4;
   public static final String NBTINV = "inv";
   ItemStackHandler inputSlots = new ItemStackHandler(1);
   ItemStackHandler outputSlots = new ItemStackHandler(1);
@@ -32,6 +32,7 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   private LazyOptional<IItemHandler> inventoryCap = LazyOptional.of(() -> inventory);
   private int stage = 0;
   private int timer = 0;
+  private int emptyHits = 0;
 
   public TileGrinder() {
     super(ModRegistry.T_GRINDER);
@@ -50,7 +51,7 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   public boolean canProcessOre() {
-    return stage == STAGE_DONE;
+    return stage == ConfigManager.MAX_STAGE.get();
   }
 
   private void doProcess() {
@@ -99,6 +100,7 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
     inventory.deserializeNBT(tag.getCompound(NBTINV));
     stage = tag.getInt("grindstage");
     timer = tag.getInt("timer");
+    emptyHits = tag.getInt("emptyHits");
     super.read(bs, tag);
   }
 
@@ -107,12 +109,14 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
     tag.put(NBTINV, inventory.serializeNBT());
     tag.putInt("grindstage", stage);
     tag.putInt("timer", timer);
+    tag.putInt("emptyHits", emptyHits);
     return super.write(tag);
   }
 
   @Override
   public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+        && ConfigManager.AUTOMATION_ALLOWED.get()) {
       return inventoryCap.cast();
     }
     return super.getCapability(cap, side);
@@ -129,11 +133,34 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   public void incrementGrind() {
-    timer = TIMER_DONE; //restart to allow another rotation
+    timer = ConfigManager.TIMER_COOLDOWN.get(); //restart to allow another rotation
     stage++;
-    if (stage > STAGE_DONE) {
-      stage = STAGE_DONE;
+    if (stage > ConfigManager.MAX_STAGE.get()) {
+      stage = ConfigManager.MAX_STAGE.get();
     }
+    if (this.inputIsEmpty()) {
+      //only track empty if its breakable
+      this.emptyHits++;
+      if (ConfigManager.BREAKABLE_HANDLE.get() &&
+          this.emptyHits > ConfigManager.MAX_STAGE.get() * MULT_OF_MAX_STAGE_BREAKSTUFF) {
+        this.breakHandleAboveMe();
+      }
+    }
+    else {
+      this.emptyHits = 0;
+    }
+  }
+
+  private void breakHandleAboveMe() {
+    BlockState state = world.getBlockState(pos.up());
+    if (state.getBlock() == ModRegistry.B_HANDLE) {
+      world.destroyBlock(pos.up(), true);
+      this.emptyHits = 0;
+    }
+  }
+
+  private boolean inputIsEmpty() {
+    return this.inputSlots.getStackInSlot(0).isEmpty();
   }
 
   public boolean canGrind() {
