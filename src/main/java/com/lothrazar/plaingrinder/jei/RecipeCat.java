@@ -20,7 +20,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 public class RecipeCat implements IRecipeCategory<GrindRecipe> {
 
-  static ResourceLocation ID = new ResourceLocation(ModRecipeType.GRIND.toString());
+  public static final ResourceLocation ID = new ResourceLocation(ModRecipeType.GRIND.toString());
   private IDrawable gui;
   private IDrawable icon;
 
