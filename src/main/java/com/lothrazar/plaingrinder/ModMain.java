@@ -30,6 +30,9 @@ public class ModMain {
     FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, ModMain::registerRecipeSerializers);
   }
 
+  //todo: mekanism and thermal built in support
+  //3x ores in mystical ag - direct recipes
+  //ex nihilo ore chunks
   private void setup(final FMLCommonSetupEvent event) {
     //now all blocks/items exist  
     MinecraftForge.EVENT_BUS.register(new GrindEvents());
