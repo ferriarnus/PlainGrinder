@@ -46,8 +46,8 @@ public class PluginJEI implements IModPlugin {
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registry) {
     registry.addRecipeClickArea(ScreenGrinder.class,
-        75, 20,
-        40, 26, RecipeCat.ID);
+        72, 10,
+        34, 36, RecipeCat.ID);
   }
 
   @Override
