@@ -4,19 +4,19 @@ import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-public class GrindRecipe implements IRecipe<TileGrinder> {
+public class GrindRecipe implements Recipe<TileGrinder> {
 
   private static final Set<String> HASHES = new HashSet<>();
   public static final Set<GrindRecipe> RECIPES = new HashSet<>();
@@ -32,34 +32,33 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
   }
 
   @Override
-  public boolean matches(TileGrinder inv, World worldIn) {
-    for (ItemStack test : input.getMatchingStacks()) {
+  public boolean matches(TileGrinder inv, Level worldIn) {
+    for (ItemStack test : input.getItems()) {
       if (matchingStacks(test, inv.inputSlots.getStackInSlot(0))) {
         return true;
       }
     }
     return false;
-    //    return matchingStacks(, this.input);
   }
 
   public static boolean matchingStacks(ItemStack current, ItemStack in) {
     //first one fails if size is off
-    return ItemStack.areItemsEqualIgnoreDurability(current, in)
-        && ItemStack.areItemStackTagsEqual(current, in);
+    return ItemStack.isSameIgnoreDurability(current, in)
+        && ItemStack.tagMatches(current, in);
   }
 
   @Override
-  public ItemStack getCraftingResult(TileGrinder inv) {
-    return getRecipeOutput();
+  public ItemStack assemble(TileGrinder inv) {
+    return getResultItem();
   }
 
   @Override
-  public boolean canFit(int width, int height) {
+  public boolean canCraftInDimensions(int width, int height) {
     return width == 1 && height == 1;
   }
 
   @Override
-  public ItemStack getRecipeOutput() {
+  public ItemStack getResultItem() {
     return result.copy();
   }
 
@@ -69,18 +68,18 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
   }
 
   @Override
-  public IRecipeType<?> getType() {
+  public RecipeType<?> getType() {
     return ModRecipeType.GRIND;
   }
 
   @Override
-  public IRecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<?> getSerializer() {
     return SERIALIZER;
   }
 
   public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
 
-  public static class SerializeGrinderRecipe extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GrindRecipe> {
+  public static class SerializeGrinderRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GrindRecipe> {
 
     SerializeGrinderRecipe() {
       // This registry name is what people will specify in their json files.
@@ -88,12 +87,11 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
     }
 
     @Override
-    public GrindRecipe read(ResourceLocation recipeId, JsonObject json) {
+    public GrindRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
       GrindRecipe r = null;
       try {
-        Ingredient inputFirst = Ingredient.deserialize(JSONUtils.getJsonObject(json, "input"));
-        //
-        ItemStack resultStack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+        Ingredient inputFirst = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));
+        ItemStack resultStack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
         r = new GrindRecipe(recipeId, inputFirst, resultStack);
         addRecipe(r);
         return r;
@@ -105,17 +103,17 @@ public class GrindRecipe implements IRecipe<TileGrinder> {
     }
 
     @Override
-    public GrindRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-      GrindRecipe r = new GrindRecipe(recipeId, Ingredient.read(buffer), buffer.readItemStack());
+    public GrindRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+      GrindRecipe r = new GrindRecipe(recipeId, Ingredient.fromNetwork(buffer), buffer.readItem());
       //server reading recipe from client or vice/versa 
       addRecipe(r);
       return r;
     }
 
     @Override
-    public void write(PacketBuffer buffer, GrindRecipe recipe) {
-      recipe.input.write(buffer);
-      buffer.writeItemStack(recipe.getRecipeOutput());
+    public void toNetwork(FriendlyByteBuf buffer, GrindRecipe recipe) {
+      recipe.input.toNetwork(buffer);
+      buffer.writeItem(recipe.getResultItem());
     }
   }
 

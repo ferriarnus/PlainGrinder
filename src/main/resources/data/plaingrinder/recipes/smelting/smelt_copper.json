@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "plaingrinder:dust_copper"
+  },
+  "result": "minecraft:copper_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

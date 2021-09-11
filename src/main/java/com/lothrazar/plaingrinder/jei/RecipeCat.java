@@ -7,9 +7,10 @@ import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -50,23 +51,18 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
   }
 
   @Override
-  public String getTitle() {
-    return lang(ModRegistry.B_GRINDER.getTranslationKey());
-  }
-
-  public static String lang(String message) {
-    TranslationTextComponent t = new TranslationTextComponent(message);
-    return t.getString();
+  public Component getTitle() {
+    return new TranslatableComponent(ModRegistry.B_GRINDER.getDescriptionId());
   }
 
   @Override
   public void setIngredients(GrindRecipe recipe, IIngredients ingredients) {
     List<List<ItemStack>> in = new ArrayList<>();
     List<ItemStack> stuff = new ArrayList<>();
-    Collections.addAll(stuff, recipe.input.getMatchingStacks());
+    Collections.addAll(stuff, recipe.input.getItems());
     in.add(stuff);
     ingredients.setInputLists(VanillaTypes.ITEM, in);
-    ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+    ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
   }
 
   @Override
@@ -80,6 +76,6 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
       guiItemStacks.set(0, input);
     }
     guiItemStacks.init(1, false, 107, 18);
-    guiItemStacks.set(1, recipe.getRecipeOutput());
+    guiItemStacks.set(1, recipe.getResultItem());
   }
 }

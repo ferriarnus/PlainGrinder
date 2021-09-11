@@ -4,9 +4,9 @@ import com.lothrazar.plaingrinder.data.GrindEvents;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
 import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import com.lothrazar.plaingrinder.grind.ScreenGrinder;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.core.Registry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
@@ -27,7 +27,7 @@ public class ModMain {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
     //https://github.com/Minecraft-Forge-Tutorials/Custom-Json-Recipes/blob/master/src/main/java/net/darkhax/customrecipeexample/CustomRecipesMod.java
-    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(IRecipeSerializer.class, ModMain::registerRecipeSerializers);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, ModMain::registerRecipeSerializers);
   }
 
   //todo: mekanism and thermal built in support
@@ -40,10 +40,10 @@ public class ModMain {
 
   private void setupClient(final FMLClientSetupEvent event) {
     //for client side only setup
-    ScreenManager.registerFactory(ModRegistry.CTR_GRINDER, ScreenGrinder::new);
+    MenuScreens.register(ModRegistry.CTR_GRINDER, ScreenGrinder::new);
   }
 
-  public static void registerRecipeSerializers(Register<IRecipeSerializer<?>> event) {
+  public static void registerRecipeSerializers(Register<RecipeSerializer<?>> event) {
     Registry.register(Registry.RECIPE_TYPE, ModRecipeType.GRIND.toString(), ModRecipeType.GRIND);
     event.getRegistry().register(GrindRecipe.SERIALIZER);
   }

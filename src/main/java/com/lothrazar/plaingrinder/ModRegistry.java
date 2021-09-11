@@ -4,14 +4,14 @@ import com.lothrazar.plaingrinder.grind.BlockGrinder;
 import com.lothrazar.plaingrinder.grind.ContainerGrinder;
 import com.lothrazar.plaingrinder.grind.TileGrinder;
 import com.lothrazar.plaingrinder.handle.BlockHandle;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,10 +22,10 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModRegistry {
 
-  public static final ItemGroup GROUP = new ItemGroup(ModMain.MODID) {
+  public static final CreativeModeTab GROUP = new CreativeModeTab(ModMain.MODID) {
 
     @Override
-    public ItemStack createIcon() {
+    public ItemStack makeIcon() {
       return new ItemStack(ModRegistry.B_HANDLE);
     }
   };
@@ -34,41 +34,42 @@ public class ModRegistry {
   @ObjectHolder(ModMain.MODID + ":grinder")
   public static Block B_GRINDER;
   @ObjectHolder(ModMain.MODID + ":grinder")
-  public static ContainerType<ContainerGrinder> CTR_GRINDER;
+  public static MenuType<ContainerGrinder> CTR_GRINDER;
   @ObjectHolder(ModMain.MODID + ":grinder")
-  public static TileEntityType<TileGrinder> T_GRINDER;
+  public static BlockEntityType<TileGrinder> T_GRINDER;
 
   @SubscribeEvent
   public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
     IForgeRegistry<Block> r = event.getRegistry();
-    r.register(new BlockGrinder(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.9F)).setRegistryName("grinder"));
-    r.register(new BlockHandle(Block.Properties.create(Material.WOOD).hardnessAndResistance(0.4F)).setRegistryName("handle"));
+    r.register(new BlockGrinder(Block.Properties.of(Material.STONE).strength(0.9F)).setRegistryName("grinder"));
+    r.register(new BlockHandle(Block.Properties.of(Material.WOOD).strength(0.4F)).setRegistryName("handle"));
   }
 
   @SubscribeEvent
-  public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
-    IForgeRegistry<TileEntityType<?>> r = event.getRegistry();
-    r.register(TileEntityType.Builder.create(TileGrinder::new, B_GRINDER).build(null).setRegistryName("grinder"));
+  public static void onTileEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
+    IForgeRegistry<BlockEntityType<?>> r = event.getRegistry();
+    r.register(BlockEntityType.Builder.of(TileGrinder::new, B_GRINDER).build(null).setRegistryName("grinder"));
   }
 
   @SubscribeEvent
-  public static void onContainerRegistry(final RegistryEvent.Register<ContainerType<?>> event) {
-    IForgeRegistry<ContainerType<?>> r = event.getRegistry();
+  public static void onContainerRegistry(final RegistryEvent.Register<MenuType<?>> event) {
+    IForgeRegistry<MenuType<?>> r = event.getRegistry();
     r.register(IForgeContainerType.create((windowId, inv, data) -> {
-      return new ContainerGrinder(windowId, inv.player.world, data.readBlockPos(), inv, inv.player);
+      return new ContainerGrinder(windowId, inv.player.level, data.readBlockPos(), inv, inv.player);
     }).setRegistryName("grinder"));
   }
 
   @SubscribeEvent
   public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
     IForgeRegistry<Item> r = event.getRegistry();
-    r.register(new BlockItem(B_GRINDER, new Item.Properties().group(GROUP)).setRegistryName("grinder"));
-    r.register(new BlockItem(B_HANDLE, new Item.Properties().group(GROUP)).setRegistryName("handle"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_coal"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_diamond"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_gold"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_iron"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_emerald"));
-    r.register(new Item(new Item.Properties().group(GROUP)).setRegistryName("dust_lapis"));
+    r.register(new BlockItem(B_GRINDER, new Item.Properties().tab(GROUP)).setRegistryName("grinder"));
+    r.register(new BlockItem(B_HANDLE, new Item.Properties().tab(GROUP)).setRegistryName("handle"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_coal"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_diamond"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_gold"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_iron"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_emerald"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_lapis"));
+    r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_copper"));
   }
 }

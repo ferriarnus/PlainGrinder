@@ -1,9 +1,9 @@
 package com.lothrazar.plaingrinder.grind;
 
 import com.lothrazar.plaingrinder.ModMain;
-import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.world.item.crafting.RecipeType;
 
-public class ModRecipeType<RECIPE_TYPE extends GrindRecipe> implements IRecipeType<RECIPE_TYPE> {
+public class ModRecipeType<RECIPE_TYPE extends GrindRecipe> implements RecipeType<RECIPE_TYPE> {
 
   public static final ModRecipeType<GrindRecipe> GRIND = create("grinder");
 

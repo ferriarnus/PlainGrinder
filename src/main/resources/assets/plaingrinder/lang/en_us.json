@@ -7,6 +7,7 @@
 	"item.plaingrinder.dust_iron":"Iron Dust",
 	"item.plaingrinder.dust_quartz":"Quartz Dust",
 	"item.plaingrinder.dust_emerald":"Emerald Dust",
+	"item.plaingrinder.dust_copper":"Copper Dust",
 	
 	"block.plaingrinder.grinder":"Plain Grinder",
 	"block.plaingrinder.grinder.tooltip":"Place below a Handle and fill with ore",

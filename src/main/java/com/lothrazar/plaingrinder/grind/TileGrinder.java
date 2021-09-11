@@ -3,26 +3,27 @@ package com.lothrazar.plaingrinder.grind;
 import com.lothrazar.plaingrinder.ConfigManager;
 import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.data.ItemStackHandlerWrapper;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileGrinder extends TileEntity implements INamedContainerProvider, ITickableTileEntity, IInventory {
+public class TileGrinder extends BlockEntity implements MenuProvider, Container {
 
   private static final int MULT_OF_MAX_STAGE_BREAKSTUFF = 4;
   public static final String NBTINV = "inv";
@@ -34,12 +35,11 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   private int timer = 0;
   private int emptyHits = 0;
 
-  public TileGrinder() {
-    super(ModRegistry.T_GRINDER);
+  public TileGrinder(BlockPos pos, BlockState state) {
+    super(ModRegistry.T_GRINDER, pos, state);
   }
 
-  @Override
-  public void tick() {
+  private void tick() {
     timer--;
     if (timer < 0) {
       timer = 0;
@@ -64,20 +64,20 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
     if (currentRecipe != null && this.tryProcessRecipe(currentRecipe)) {
       //we did it
       //pay all costs, RF etc
-      if (world.isRemote == false) {
+      if (level.isClientSide == false) {
         //server so process
         this.inputSlots.getStackInSlot(0).shrink(1);
         //and then insert it for real 
-        this.outputSlots.insertItem(0, currentRecipe.getCraftingResult(this), false);
+        this.outputSlots.insertItem(0, currentRecipe.assemble(this), false);
         //and sound on the trigger
-        world.playEvent((PlayerEntity) null, 1042, pos, 0);
+        level.levelEvent((Player) null, 1042, worldPosition, 0);
       }
     }
   }
 
   private boolean tryProcessRecipe(GrindRecipe currentRecipe) {
     // ok so do the thing
-    ItemStack result = currentRecipe.getCraftingResult(this);
+    ItemStack result = currentRecipe.assemble(this);
     //does it match? does it fit into the output slot 
     //insert in simulate mode. does it fit?
     if (this.outputSlots.insertItem(0, result, true).isEmpty()) {
@@ -88,7 +88,7 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
 
   private GrindRecipe findMatchingRecipe() {
     for (GrindRecipe rec : GrindRecipe.RECIPES) {
-      if (rec.matches(this, world)) {
+      if (rec.matches(this, level)) {
         return rec;
       }
     }
@@ -96,21 +96,21 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   @Override
-  public void read(BlockState bs, CompoundNBT tag) {
+  public void load(CompoundTag tag) {
     inventory.deserializeNBT(tag.getCompound(NBTINV));
     stage = tag.getInt("grindstage");
     timer = tag.getInt("timer");
     emptyHits = tag.getInt("emptyHits");
-    super.read(bs, tag);
+    super.load(tag);
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT tag) {
+  public CompoundTag save(CompoundTag tag) {
     tag.put(NBTINV, inventory.serializeNBT());
     tag.putInt("grindstage", stage);
     tag.putInt("timer", timer);
     tag.putInt("emptyHits", emptyHits);
-    return super.write(tag);
+    return super.save(tag);
   }
 
   @Override
@@ -123,13 +123,13 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   @Override
-  public ITextComponent getDisplayName() {
-    return new StringTextComponent(getType().getRegistryName().getPath());
+  public Component getDisplayName() {
+    return new TextComponent(getType().getRegistryName().getPath());
   }
 
   @Override
-  public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-    return new ContainerGrinder(i, world, pos, playerInventory, playerEntity);
+  public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
+    return new ContainerGrinder(i, level, worldPosition, playerInventory, playerEntity);
   }
 
   public void incrementGrind() {
@@ -152,9 +152,9 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   private void breakHandleAboveMe() {
-    BlockState state = world.getBlockState(pos.up());
+    BlockState state = level.getBlockState(worldPosition.above());
     if (state.getBlock() == ModRegistry.B_HANDLE) {
-      world.destroyBlock(pos.up(), true);
+      level.destroyBlock(worldPosition.above(), true);
       this.emptyHits = 0;
     }
   }
@@ -169,22 +169,22 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
 
   /******** Fakeout stuff for IRecipe *********************/
   @Override
-  public void clear() {
+  public void clearContent() {
     // TODO Auto-generated method stub
   }
 
   @Override
-  public ItemStack decrStackSize(int arg0, int arg1) {
+  public ItemStack removeItem(int arg0, int arg1) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  public int getSizeInventory() {
+  public int getContainerSize() {
     return 0;
   }
 
   @Override
-  public ItemStack getStackInSlot(int arg0) {
+  public ItemStack getItem(int arg0) {
     return ItemStack.EMPTY;
   }
 
@@ -194,15 +194,22 @@ public class TileGrinder extends TileEntity implements INamedContainerProvider, 
   }
 
   @Override
-  public boolean isUsableByPlayer(PlayerEntity arg0) {
+  public boolean stillValid(Player arg0) {
     return true;
   }
 
   @Override
-  public ItemStack removeStackFromSlot(int arg0) {
+  public ItemStack removeItemNoUpdate(int arg0) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  public void setInventorySlotContents(int arg0, ItemStack arg1) {}
+  public void setItem(int arg0, ItemStack arg1) {}
+
+  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
+  }
+
+  public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tile) {
+    tile.tick();
+  }
 }
