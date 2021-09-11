@@ -4,19 +4,19 @@ import com.lothrazar.plaingrinder.ConfigManager;
 import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.data.ItemStackHandlerWrapper;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.Container;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -204,7 +204,8 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   @Override
-  public void setItem(int arg0, ItemStack arg1) {}
+  public void setItem(int arg0, ItemStack arg1) {
+  }
 
   public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
   }

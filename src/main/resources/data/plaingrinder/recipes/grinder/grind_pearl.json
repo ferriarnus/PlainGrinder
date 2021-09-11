@@ -8,14 +8,14 @@
     "count": 1
   },
   "conditions": [
-		{
-			"values": [
+    {
+      "values": [
         {
           "item": "thermal:ender_pearl_dust",
           "type": "forge:item_exists"
         }
-			],
-			"type": "forge:and"
-		}
-	]
+      ],
+      "type": "forge:and"
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 package com.lothrazar.plaingrinder.data;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -9,10 +9,10 @@ import net.minecraftforge.items.ItemStackHandler;
 
 /**
  * from
- * 
+ * <p>
  * https://raw.githubusercontent.com/Lothrazar/Cyclic/253b2d1e4817c80f00b23e3c51e59b0a10ba4078/src/main/java/com/lothrazar/cyclic/capability/ItemStackHandlerWrapper.java
- * 
- * 
+ * <p>
+ * <p>
  * Wraps two {@link ItemStackHandler}s: Input and Output. Input's slots come first then the Output's slots come after. Items can only be inserted into Input. Items can only be extracted from Output.
  * Note that the above only applies to operations on the wrapper, the backing handlers are not restricted. For persistence, either the backing {@link ItemStackHandler}s can be saved, or the wrapper
  * itself.

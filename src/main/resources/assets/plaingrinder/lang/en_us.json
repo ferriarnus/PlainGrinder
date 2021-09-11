@@ -1,18 +1,15 @@
-{ 
-	
-	"item.plaingrinder.dust_gold":"Gold Dust",
-	"item.plaingrinder.dust_diamond":"Diamond Dust",
-	"item.plaingrinder.dust_coal":"Coal Dust",
-	"item.plaingrinder.dust_lapis":"Lapis Dust",
-	"item.plaingrinder.dust_iron":"Iron Dust",
-	"item.plaingrinder.dust_quartz":"Quartz Dust",
-	"item.plaingrinder.dust_emerald":"Emerald Dust",
-	"item.plaingrinder.dust_copper":"Copper Dust",
-	
-	"block.plaingrinder.grinder":"Plain Grinder",
-	"block.plaingrinder.grinder.tooltip":"Place below a Handle and fill with ore",
-	"block.plaingrinder.handle":"Grinder Handle",
-	"block.plaingrinder.handle.tooltip":"Turn this while on top of a Grinder",
-
-	"itemGroup.plaingrinder":"Plain Grinder"
+{
+  "item.plaingrinder.dust_gold": "Gold Dust",
+  "item.plaingrinder.dust_diamond": "Diamond Dust",
+  "item.plaingrinder.dust_coal": "Coal Dust",
+  "item.plaingrinder.dust_lapis": "Lapis Dust",
+  "item.plaingrinder.dust_iron": "Iron Dust",
+  "item.plaingrinder.dust_quartz": "Quartz Dust",
+  "item.plaingrinder.dust_emerald": "Emerald Dust",
+  "item.plaingrinder.dust_copper": "Copper Dust",
+  "block.plaingrinder.grinder": "Plain Grinder",
+  "block.plaingrinder.grinder.tooltip": "Place below a Handle and fill with ore",
+  "block.plaingrinder.handle": "Grinder Handle",
+  "block.plaingrinder.handle.tooltip": "Turn this while on top of a Grinder",
+  "itemGroup.plaingrinder": "Plain Grinder"
 }

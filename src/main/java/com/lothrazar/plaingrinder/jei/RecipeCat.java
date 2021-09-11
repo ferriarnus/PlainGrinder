@@ -7,10 +7,6 @@ import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -18,6 +14,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class RecipeCat implements IRecipeCategory<GrindRecipe> {
 

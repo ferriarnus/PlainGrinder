@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "plaingrinder:block/grinder" }
+  "variants": {
+    "": {
+      "model": "plaingrinder:block/grinder"
     }
+  }
 }

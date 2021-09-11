@@ -5,9 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
 
@@ -39,7 +39,7 @@ public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
   protected void drawBackground(PoseStack ms, ResourceLocation gui) {
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, gui);
-//    this.minecraft.getTextureManager().bindForSetup(gui);
+    //    this.minecraft.getTextureManager().bindForSetup(gui);
     int relX = (this.width - this.imageWidth) / 2;
     int relY = (this.height - this.imageHeight) / 2;
     this.blit(ms, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
@@ -49,7 +49,7 @@ public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
 
   protected void drawSlot(PoseStack ms, int x, int y) {
     final int size = 18;
-//    this.minecraft.getTextureManager().bindForSetup(SLOT);
+    //    this.minecraft.getTextureManager().bindForSetup(SLOT);
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, SLOT);
     blit(ms, leftPos + x, topPos + y, 0, 0, size, size, size, size);

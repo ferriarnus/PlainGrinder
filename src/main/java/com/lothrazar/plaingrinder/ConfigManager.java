@@ -15,6 +15,7 @@ public class ConfigManager {
   public static IntValue MAX_STAGE;
   public static BooleanValue BREAKABLE_HANDLE;
   public static BooleanValue AUTOMATION_ALLOWED;
+
   static {
     initConfig();
   }
