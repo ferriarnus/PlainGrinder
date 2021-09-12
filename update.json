@@ -1,10 +1,11 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/plain-grinder",
   "promos": {
-    "1.17.1-latest": "1.1.0",
-    "1.17.1-recommended": "1.1.0"
+    "1.17.1-latest": "1.2.0",
+    "1.17.1-recommended": "1.2.0"
   },
   "1.16.5": {
     "1.1.0": "Ported to 1.17.1.  Copper Dust added "
+    ,"1.2.0":"New textures by Lylythii. New items: Quartz Dust and Charcoal Dust. Added several recipes such as blaze, bonemeal. Coal and Charcoal dust can be used as furnace fuel directly. "
   }
 }

@@ -29,7 +29,7 @@ logoFile="logoFile.png" #optional
 # A text field displayed in the mod UI
 credits="Thanks to forge fml mcp Mojang" #optional
 # A text field displayed in the mod UI
-authors="Lothrazar" #optional
+authors="Lothrazar, Lylythii" #optional
 # The description text for the mod (multi line!) (#mandatory)
 
 description='''
