@@ -1,7 +1,7 @@
 package com.lothrazar.plaingrinder.grind;
 
-import com.lothrazar.plaingrinder.ModRegistry;
 import java.util.List;
+import com.lothrazar.plaingrinder.ModRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -26,8 +26,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 public class BlockGrinder extends BaseEntityBlock {
 
@@ -69,14 +67,15 @@ public class BlockGrinder extends BaseEntityBlock {
   public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
     if (state.getBlock() != newState.getBlock()) {
       BlockEntity tileentity = worldIn.getBlockEntity(pos);
-      if (tileentity != null) {
-        IItemHandler items = tileentity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);
-        if (items != null) {
-          for (int i = 0; i < items.getSlots(); ++i) {
-            Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(i));
-          }
-          worldIn.updateNeighbourForOutputSignal(pos, this);
+      if (tileentity instanceof TileGrinder) {
+        TileGrinder grinder = (TileGrinder) tileentity;
+        for (int i = 0; i < grinder.inputSlots.getSlots(); ++i) {
+          Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), grinder.inputSlots.getStackInSlot(i));
         }
+        for (int i = 0; i < grinder.outputSlots.getSlots(); ++i) {
+          Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), grinder.outputSlots.getStackInSlot(i));
+        }
+        worldIn.updateNeighbourForOutputSignal(pos, this);
       }
       super.onRemove(state, worldIn, pos, newState, isMoving);
     }
