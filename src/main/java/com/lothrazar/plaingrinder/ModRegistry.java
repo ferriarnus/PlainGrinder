@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -54,7 +54,7 @@ public class ModRegistry {
   @SubscribeEvent
   public static void onContainerRegistry(final RegistryEvent.Register<MenuType<?>> event) {
     IForgeRegistry<MenuType<?>> r = event.getRegistry();
-    r.register(IForgeContainerType.create((windowId, inv, data) -> {
+    r.register(IForgeMenuType.create((windowId, inv, data) -> {
       return new ContainerGrinder(windowId, inv.player.level, data.readBlockPos(), inv, inv.player);
     }).setRegistryName("grinder"));
   }
