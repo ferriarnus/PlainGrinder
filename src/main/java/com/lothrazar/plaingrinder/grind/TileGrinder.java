@@ -105,12 +105,12 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   @Override
-  public CompoundTag save(CompoundTag tag) {
+  public void saveAdditional(CompoundTag tag) {
+    super.saveAdditional(tag);
     tag.put(NBTINV, inventory.serializeNBT());
     tag.putInt("grindstage", stage);
     tag.putInt("timer", timer);
     tag.putInt("emptyHits", emptyHits);
-    return super.save(tag);
   }
 
   @Override
