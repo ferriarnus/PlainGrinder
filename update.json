@@ -1,12 +1,14 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/plain-grinder",
   "promos": {
-    "1.18-latest": "1.2.2"
+    "1.18.1-latest": "1.2.4"
   },
-  "1.18": {
+  "1.18.1": {
     "1.1.0": "Ported to 1.17.1.  Copper Dust added "
     ,"1.2.0":"New textures by Lylythii. New items: Quartz Dust and Charcoal Dust. Added several recipes such as blaze, bonemeal. Coal and Charcoal dust can be used as furnace fuel directly. "
     ,"1.2.1":"If your config was set to disable automation capability (allowAutomation = false), this version fixes a bug with items not droping when grinder block is broken."
  	,"1.2.2":"Blast furnace recipes added for smelting dust"
+    ,"1.2.3": "Fix grinder deleting items on world reload"
+    ,"1.2.4":" Fix usage of save() #5 and update JEI compat [MrBysco] ; forge-39.0.79 , jei-1.18.1:9.2.1.69 "
   }
 }

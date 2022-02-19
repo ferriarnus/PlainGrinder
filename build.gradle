@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: 'checkstyle'
+//apply plugin: 'checkstyle'
 
 import net.minecraftforge.gradle.common.tasks.SignJar
 
@@ -24,13 +24,13 @@ archivesBaseName = 'plaingrinder'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-checkstyle {
-    toolVersion '8.23'
-    config project.resources.text.fromUri("https://raw.githubusercontent.com/Lothrazar/Cyclic/trunk/1.16/checkstyle.xml") //TODO: Checkstyle update?
-}
-checkstyleMain {
-    source = 'src/main/java'
-}
+//checkstyle {
+//    toolVersion '8.23'
+//    config project.resources.text.fromUri("https://raw.githubusercontent.com/Lothrazar/Cyclic/trunk/1.16/checkstyle.xml") //TODO: Checkstyle update?
+//}
+//checkstyleMain {
+//    source = 'src/main/java'
+//}
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
