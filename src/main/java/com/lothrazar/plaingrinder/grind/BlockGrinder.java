@@ -1,6 +1,5 @@
 package com.lothrazar.plaingrinder.grind;
 
-import java.util.List;
 import com.lothrazar.plaingrinder.ModRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -26,6 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
+
+import java.util.List;
 
 public class BlockGrinder extends BaseEntityBlock {
 

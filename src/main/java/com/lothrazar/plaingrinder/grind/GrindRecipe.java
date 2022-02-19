@@ -2,8 +2,6 @@ package com.lothrazar.plaingrinder.grind;
 
 import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
-import java.util.HashSet;
-import java.util.Set;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -15,6 +13,9 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class GrindRecipe implements Recipe<TileGrinder> {
 
