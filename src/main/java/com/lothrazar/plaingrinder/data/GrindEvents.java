@@ -23,9 +23,9 @@ public class GrindEvents {
     Player player = event.getPlayer();
     Level world = player.getCommandSenderWorld();
     BlockState state = world.getBlockState(pos);
-    if (state.getBlock() == ModRegistry.B_HANDLE) {
+    if (state.getBlock() == ModRegistry.handle.get()) {
       BlockState below = world.getBlockState(pos.below());
-      if (below.getBlock() == ModRegistry.B_GRINDER) {
+      if (below.getBlock() == ModRegistry.GRINDER.get()) {
         //do the thing
         TileGrinder tile = (TileGrinder) world.getBlockEntity(pos.below());
         if (tile.canGrind()) {

@@ -1,9 +1,13 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/plain-grinder",
   "promos": {
-    "1.18.1-latest": "1.2.4"
+    "1.18.2-latest": "1.2.4",
+    "1.19-latest": "1.2.4"
   },
-  "1.18.1": {
+  "1.19":{
+  	"1.2.4":"Ported"
+  },
+  "1.18.2": {
     "1.1.0": "Ported to 1.17.1.  Copper Dust added "
     ,"1.2.0":"New textures by Lylythii. New items: Quartz Dust and Charcoal Dust. Added several recipes such as blaze, bonemeal. Coal and Charcoal dust can be used as furnace fuel directly. "
     ,"1.2.1":"If your config was set to disable automation capability (allowAutomation = false), this version fixes a bug with items not droping when grinder block is broken."

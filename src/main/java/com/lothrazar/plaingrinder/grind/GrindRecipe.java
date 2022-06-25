@@ -1,5 +1,7 @@
 package com.lothrazar.plaingrinder.grind;
 
+import java.util.HashSet;
+import java.util.Set;
 import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,10 +14,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class GrindRecipe implements Recipe<TileGrinder> {
 
@@ -80,11 +78,11 @@ public class GrindRecipe implements Recipe<TileGrinder> {
 
   public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
 
-  public static class SerializeGrinderRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GrindRecipe> {
+  public static class SerializeGrinderRecipe implements RecipeSerializer<GrindRecipe> {
 
     SerializeGrinderRecipe() {
       // This registry name is what people will specify in their json files.
-      this.setRegistryName(new ResourceLocation(ModMain.MODID, "grinder"));
+      //      this.setRegistryName(new ResourceLocation(ModMain.MODID, "grinder"));
     }
 
     @Override

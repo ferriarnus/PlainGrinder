@@ -7,12 +7,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -36,7 +36,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   private int emptyHits = 0;
 
   public TileGrinder(BlockPos pos, BlockState state) {
-    super(ModRegistry.T_GRINDER, pos, state);
+    super(ModRegistry.TE_GRINDER.get(), pos, state);
   }
 
   private void tick() {
@@ -124,12 +124,12 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   @Override
   public Component getDisplayName() {
-    return new TextComponent(getType().getRegistryName().getPath());
+    return Component.translatable("blocks.plaingrinder.grinder");
   }
 
   @Override
   public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
-    return new ContainerGrinder(i, level, worldPosition, playerInventory, playerEntity);
+    return new ContainerGrinder(i, playerInventory, ContainerLevelAccess.create(level, worldPosition));
   }
 
   public void incrementGrind() {
@@ -153,7 +153,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   private void breakHandleAboveMe() {
     BlockState state = level.getBlockState(worldPosition.above());
-    if (state.getBlock() == ModRegistry.B_HANDLE) {
+    if (state.getBlock() == ModRegistry.handle.get()) {
       level.destroyBlock(worldPosition.above(), true);
       this.emptyHits = 0;
     }
@@ -204,11 +204,9 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   @Override
-  public void setItem(int arg0, ItemStack arg1) {
-  }
+  public void setItem(int arg0, ItemStack arg1) {}
 
-  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
-  }
+  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {}
 
   public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tile) {
     tile.tick();

@@ -1,14 +1,13 @@
 package com.lothrazar.plaingrinder.grind;
 
 import com.lothrazar.plaingrinder.ModRegistry;
-import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerGrinder extends AbstractContainerMenu {
@@ -17,21 +16,21 @@ public class ContainerGrinder extends AbstractContainerMenu {
   protected int startInv = 0;
   protected int endInv = 2;
   private TileGrinder tile;
-  protected Player playerEntity;
   protected Inventory playerInventory;
 
-  public ContainerGrinder(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
-    this(ModRegistry.CTR_GRINDER, windowId);
-    this.playerEntity = player;
-    this.playerInventory = inv;
-    tile = (TileGrinder) world.getBlockEntity(pos);
-    addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
-    addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
-    layoutPlayerInventorySlots(8, 84);
+  public ContainerGrinder(int id, Inventory inv, FriendlyByteBuf extraData) {
+    this(id, inv, ContainerLevelAccess.NULL);
   }
 
-  public ContainerGrinder(MenuType<ContainerGrinder> ctrgrinder, int windowId) {
-    super(ctrgrinder, windowId);
+  public ContainerGrinder(int windowId, Inventory inv, ContainerLevelAccess access) { //(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
+    super(ModRegistry.MENU.get(), windowId);
+    this.playerInventory = inv;
+    access.execute((world, pos) -> {
+      this.tile = (TileGrinder) world.getBlockEntity(pos);
+      addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
+      addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
+    });
+    layoutPlayerInventorySlots(8, 84);
   }
 
   @Override

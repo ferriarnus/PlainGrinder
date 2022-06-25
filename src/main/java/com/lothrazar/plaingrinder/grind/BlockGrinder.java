@@ -1,10 +1,10 @@
 package com.lothrazar.plaingrinder.grind;
 
+import java.util.List;
 import com.lothrazar.plaingrinder.ModRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -26,8 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
 
-import java.util.List;
-
 public class BlockGrinder extends BaseEntityBlock {
 
   public BlockGrinder(Properties properties) {
@@ -46,7 +44,7 @@ public class BlockGrinder extends BaseEntityBlock {
 
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-    return createTickerHelper(type, ModRegistry.T_GRINDER, world.isClientSide ? TileGrinder::clientTick : TileGrinder::serverTick);
+    return createTickerHelper(type, ModRegistry.TE_GRINDER.get(), world.isClientSide ? TileGrinder::clientTick : TileGrinder::serverTick);
   }
 
   @Override
@@ -85,7 +83,6 @@ public class BlockGrinder extends BaseEntityBlock {
   @Override
   @OnlyIn(Dist.CLIENT)
   public void appendHoverText(ItemStack stack, BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-    TranslatableComponent t = new TranslatableComponent(getDescriptionId() + ".tooltip");
-    tooltip.add(t.withStyle(ChatFormatting.GRAY));
+    tooltip.add(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
   }
 }
