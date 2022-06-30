@@ -8,6 +8,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
@@ -23,11 +24,6 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
     gui = helper.drawableBuilder(new ResourceLocation(ModMain.MODID, "textures/gui/jei.png"), 0, 0, 169, 69).setTextureSize(169, 69).build();
     icon = helper.drawableBuilder(new ResourceLocation(ModMain.MODID, "textures/block/grinder_top.png"), 0, 0, 16, 16).setTextureSize(16, 16).build();
   }
-  //
-  //  @Override
-  //  public ResourceLocation getUid() {
-  //    return ID;
-  //  }
 
   @Override
   public IDrawable getIcon() {
@@ -38,10 +34,6 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
   public IDrawable getBackground() {
     return gui;
   }
-  //  @Override
-  //  public Class<? extends GrindRecipe> getRecipeClass() {
-  //    return GrindRecipe.class;
-  //  }
 
   @Override
   public Component getTitle() {
@@ -59,7 +51,9 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, GrindRecipe recipe, IFocusGroup focuses) {
-    // TODO Auto-generated method stub  
+    builder.addSlot(RecipeIngredientRole.INPUT, 3, 18);
+    builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 18);
+    //so whats missing???
   }
   //  @Override
   //  public void setRecipe(IRecipeLayout recipeLayout, GrindRecipe recipe, IIngredients ingredients) {
@@ -77,6 +71,6 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
 
   @Override
   public RecipeType<GrindRecipe> getRecipeType() {
-    return null; // wtf is this
+    return PluginJEI.recipeTypeJei;
   }
 }

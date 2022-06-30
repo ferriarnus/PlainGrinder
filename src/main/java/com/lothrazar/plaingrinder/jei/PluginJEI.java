@@ -26,11 +26,11 @@ public class PluginJEI implements IModPlugin {
     return ID;
   }
 
-  RecipeType<GrindRecipe> WTFISTHIS = RecipeType.create(ModMain.MODID, "grinder", GrindRecipe.class);
+  static RecipeType<GrindRecipe> recipeTypeJei = RecipeType.create(ModMain.MODID, "grinder", GrindRecipe.class);
 
   @Override
   public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-    registration.addRecipeCatalyst(new ItemStack(ModRegistry.igrinder.get()), WTFISTHIS);
+    registration.addRecipeCatalyst(new ItemStack(ModRegistry.igrinder.get()), recipeTypeJei);
   }
 
   @Override
@@ -41,16 +41,16 @@ public class PluginJEI implements IModPlugin {
 
   @Override
   public void registerRecipes(IRecipeRegistration registry) {
-    registry.addRecipes(WTFISTHIS, List.copyOf(GrindRecipe.RECIPES));
+    registry.addRecipes(recipeTypeJei, List.copyOf(GrindRecipe.RECIPES));
   }
 
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registry) {
     registry.addRecipeClickArea(ScreenGrinder.class,
         72, 10,
-        34, 36, WTFISTHIS);
+        34, 36, recipeTypeJei);
   }
-  //?? its gone
+  //?? its gone. ok so its broken? 
   //  @Override
   //  public void registerRecipeTransferHandlers(IRecipeTransferRegistration registry) {
   //    registry.addRecipeTransferHandler(ContainerGrinder.class, WTFISTHIS,

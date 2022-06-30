@@ -5,7 +5,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
@@ -15,21 +14,18 @@ public class ContainerGrinder extends AbstractContainerMenu {
   public static final int PLAYERSIZE = 4 * 9;
   protected int startInv = 0;
   protected int endInv = 2;
-  private TileGrinder tile;
   protected Inventory playerInventory;
 
   public ContainerGrinder(int id, Inventory inv, FriendlyByteBuf extraData) {
-    this(id, inv, ContainerLevelAccess.NULL);
+    this(id, inv, (TileGrinder) inv.player.level.getBlockEntity(extraData.readBlockPos()));
   }
 
-  public ContainerGrinder(int windowId, Inventory inv, ContainerLevelAccess access) { //(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
+  //OLD(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
+  public ContainerGrinder(int windowId, Inventory inv, TileGrinder tile) {
     super(ModRegistry.MENU.get(), windowId);
     this.playerInventory = inv;
-    access.execute((world, pos) -> {
-      this.tile = (TileGrinder) world.getBlockEntity(pos);
-      addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
-      addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
-    });
+    addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
+    addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
     layoutPlayerInventorySlots(8, 84);
   }
 

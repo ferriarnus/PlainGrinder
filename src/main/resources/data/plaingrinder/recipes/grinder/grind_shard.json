@@ -1,0 +1,10 @@
+{
+  "type": "plaingrinder:grinder",
+  "input": {
+    "item": "minecraft:recovery_compass"
+  },
+  "result": {
+    "item": "minecraft:echo_shard",
+    "count": 8
+  }
+}

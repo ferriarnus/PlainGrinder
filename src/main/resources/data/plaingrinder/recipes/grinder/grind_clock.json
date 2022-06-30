@@ -1,0 +1,10 @@
+{
+  "type": "plaingrinder:grinder",
+  "input": {
+    "item": "minecraft:clock"
+  },
+  "result": {
+    "item": "minecraft:gold_ingot",
+    "count": 4
+  }
+}

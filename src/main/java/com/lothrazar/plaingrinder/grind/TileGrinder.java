@@ -12,7 +12,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -124,12 +123,12 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   @Override
   public Component getDisplayName() {
-    return Component.translatable("blocks.plaingrinder.grinder");
+    return Component.translatable("block.plaingrinder.grinder");
   }
 
   @Override
   public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
-    return new ContainerGrinder(i, playerInventory, ContainerLevelAccess.create(level, worldPosition));
+    return new ContainerGrinder(i, playerInventory, this);
   }
 
   public void incrementGrind() {
@@ -167,25 +166,19 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     return timer == 0;
   }
 
-  /******** Fakeout stuff for IRecipe *********************/
-  @Override
-  public void clearContent() {
-    // TODO Auto-generated method stub
-  }
-
   @Override
   public ItemStack removeItem(int arg0, int arg1) {
-    return ItemStack.EMPTY;
+    return inventory.extractItem(arg0, arg1, false);
   }
 
   @Override
   public int getContainerSize() {
-    return 0;
+    return this.inputSlots.getSlots() + this.outputSlots.getSlots();
   }
 
   @Override
   public ItemStack getItem(int arg0) {
-    return ItemStack.EMPTY;
+    return inventory.getStackInSlot(arg0);
   }
 
   @Override
@@ -194,8 +187,8 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   @Override
-  public boolean stillValid(Player arg0) {
-    return true;
+  public boolean stillValid(Player player) {
+    return player.isAlive();
   }
 
   @Override
@@ -204,11 +197,20 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   @Override
-  public void setItem(int arg0, ItemStack arg1) {}
+  public void setItem(int arg0, ItemStack arg1) {
+    inventory.insertItem(arg0, arg1, false);
+  }
 
-  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {}
+  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
+    //NOOP 
+  }
 
   public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tile) {
     tile.tick();
+  }
+
+  @Override
+  public void clearContent() {
+    // TODO Auto-generated method stub
   }
 }
