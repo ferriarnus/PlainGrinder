@@ -41,6 +41,8 @@ public class PluginJEI implements IModPlugin {
 
   @Override
   public void registerRecipes(IRecipeRegistration registry) {
+    assert recipeTypeJei != null;
+
     registry.addRecipes(recipeTypeJei, List.copyOf(GrindRecipe.RECIPES));
   }
 

@@ -3,7 +3,6 @@ package com.lothrazar.plaingrinder.jei;
 import com.lothrazar.plaingrinder.ModMain;
 import com.lothrazar.plaingrinder.ModRegistry;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
-import com.lothrazar.plaingrinder.grind.ModRecipeType;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -16,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RecipeCat implements IRecipeCategory<GrindRecipe> {
 
-  public static final ResourceLocation ID = new ResourceLocation(ModRecipeType.GRIND.toString());
+  public static final ResourceLocation ID = new ResourceLocation(ModRegistry.GRINDER_RECIPE_TYPE.getId().toString());
   private IDrawable gui;
   private IDrawable icon;
 
@@ -39,35 +38,12 @@ public class RecipeCat implements IRecipeCategory<GrindRecipe> {
   public Component getTitle() {
     return Component.translatable(ModRegistry.GRINDER.get().getDescriptionId());
   }
-  //  @Override
-  //  public void setIngredients(GrindRecipe recipe, IIngredients ingredients) {
-  //    List<List<ItemStack>> in = new ArrayList<>();
-  //    List<ItemStack> stuff = new ArrayList<>();
-  //    Collections.addAll(stuff, recipe.input.getItems());
-  //    in.add(stuff);
-  //    ingredients.setInputLists(VanillaTypes.ITEM, in);
-  //    ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-  //  }
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, GrindRecipe recipe, IFocusGroup focuses) {
-    builder.addSlot(RecipeIngredientRole.INPUT, 3, 18);
-    builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 18);
-    //so whats missing???
+    builder.addSlot(RecipeIngredientRole.INPUT, 4, 19).addIngredients(recipe.input);
+    builder.addSlot(RecipeIngredientRole.OUTPUT, 108, 19).addItemStack(recipe.getResultItem());
   }
-  //  @Override
-  //  public void setRecipe(IRecipeLayout recipeLayout, GrindRecipe recipe, IIngredients ingredients) {
-  //    IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-  //    guiItemStacks.init(0, true, 3, 18);
-  //    //
-  //    List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
-  //    List<ItemStack> input = inputs.get(0);
-  //    if (input != null && input.isEmpty() == false) {
-  //      guiItemStacks.set(0, input);
-  //    }
-  //    guiItemStacks.init(1, false, 107, 18);
-  //    guiItemStacks.set(1, recipe.getResultItem());
-  //  }
 
   @Override
   public RecipeType<GrindRecipe> getRecipeType() {
