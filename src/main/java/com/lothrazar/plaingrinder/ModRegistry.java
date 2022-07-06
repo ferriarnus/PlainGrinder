@@ -3,32 +3,33 @@ package com.lothrazar.plaingrinder;
 import com.lothrazar.plaingrinder.grind.BlockGrinder;
 import com.lothrazar.plaingrinder.grind.ContainerGrinder;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
-import com.lothrazar.plaingrinder.grind.ModRecipeType;
+import com.lothrazar.plaingrinder.grind.GrindRecipe.SerializeGrinderRecipe;
 import com.lothrazar.plaingrinder.grind.TileGrinder;
 import com.lothrazar.plaingrinder.handle.BlockHandle;
+import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModRegistry {
 
   static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ModMain.MODID);
   static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ModMain.MODID);
   static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ModMain.MODID);
   static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, ModMain.MODID);
+  static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ModMain.MODID);
+  static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, ModMain.MODID);
   public static final CreativeModeTab TAB = new CreativeModeTab(ModMain.MODID) {
 
     @Override
@@ -49,17 +50,11 @@ public class ModRegistry {
   //      return new ContainerGrinder(windowId, inv.player.level, data.readBlockPos(), inv, inv.player);
   //    }).setRegistryName("grinder"));
   //  }
-  @SubscribeEvent
-  public static void onBlocksRegistry(RegisterEvent event) {
-    event.register(ForgeRegistries.Keys.RECIPE_TYPES, r -> {
-      r.register("grinder", ModRecipeType.GRIND);
-    });
-    event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, r -> {
-      //
-      //      Registry.register(Registry.RECIPE_TYPE, ModRecipeType.GRIND.toString(), ModRecipeType.GRIND);
-      r.register("grinder", GrindRecipe.SERIALIZER);
-    });
-  }
+
+  public static final RegistryObject<RecipeType<GrindRecipe>> GRINDER_RECIPE_TYPE = RECIPE_TYPES.register("grinder", () -> new RecipeType<>() {
+  });
+
+  public static final RegistryObject<SerializeGrinderRecipe> GRINDER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("grinder", SerializeGrinderRecipe::new);
 
   public static final RegistryObject<MenuType<ContainerGrinder>> MENU = CONTAINERS.register("grinder", () -> IForgeMenuType.create(ContainerGrinder::new));
   ///

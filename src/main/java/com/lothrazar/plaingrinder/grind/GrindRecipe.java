@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
+import com.lothrazar.plaingrinder.ModRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -68,19 +69,18 @@ public class GrindRecipe implements Recipe<TileGrinder> {
 
   @Override
   public RecipeType<?> getType() {
-    return ModRecipeType.GRIND;
+    return ModRegistry.GRINDER_RECIPE_TYPE.get();
   }
 
   @Override
   public RecipeSerializer<?> getSerializer() {
-    return SERIALIZER;
+    return ModRegistry.GRINDER_RECIPE_SERIALIZER.get();
   }
 
-  public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
 
   public static class SerializeGrinderRecipe implements RecipeSerializer<GrindRecipe> {
 
-    SerializeGrinderRecipe() {
+    public SerializeGrinderRecipe() {
       // This registry name is what people will specify in their json files.
       //      this.setRegistryName(new ResourceLocation(ModMain.MODID, "grinder"));
     }

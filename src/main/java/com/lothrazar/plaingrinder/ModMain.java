@@ -29,6 +29,8 @@ public class ModMain {
     ModRegistry.BLOCKS.register(eventBus);
     ModRegistry.CONTAINERS.register(eventBus);
     ModRegistry.TILES.register(eventBus);
+    ModRegistry.RECIPE_TYPES.register(eventBus);
+    ModRegistry.RECIPE_SERIALIZERS.register(eventBus);
   }
 
   //todo: mekanism and thermal built in support

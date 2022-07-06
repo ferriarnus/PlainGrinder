@@ -66,8 +66,7 @@ public class BlockGrinder extends BaseEntityBlock {
   public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
     if (state.getBlock() != newState.getBlock()) {
       BlockEntity tileentity = worldIn.getBlockEntity(pos);
-      if (tileentity instanceof TileGrinder) {
-        TileGrinder grinder = (TileGrinder) tileentity;
+      if (tileentity instanceof TileGrinder grinder) {
         for (int i = 0; i < grinder.inputSlots.getSlots(); ++i) {
           Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), grinder.inputSlots.getStackInSlot(i));
         }
