@@ -1,7 +1,7 @@
 package com.lothrazar.plaingrinder.data;
 
 import com.lothrazar.plaingrinder.ModRegistry;
-import com.lothrazar.plaingrinder.grind.TileGrinder;
+import com.lothrazar.plaingrinder.grind.BlockEntityGrinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +27,7 @@ public class GrindEvents {
       BlockState below = world.getBlockState(pos.below());
       if (below.getBlock() == ModRegistry.GRINDER.get()) {
         //do the thing
-        TileGrinder tile = (TileGrinder) world.getBlockEntity(pos.below());
+        BlockEntityGrinder tile = (BlockEntityGrinder) world.getBlockEntity(pos.below());
         if (tile.canGrind()) {
           // and state
           if (world.isClientSide == false) {

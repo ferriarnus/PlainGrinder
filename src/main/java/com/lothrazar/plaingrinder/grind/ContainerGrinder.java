@@ -17,11 +17,11 @@ public class ContainerGrinder extends AbstractContainerMenu {
   protected Inventory playerInventory;
 
   public ContainerGrinder(int id, Inventory inv, FriendlyByteBuf extraData) {
-    this(id, inv, (TileGrinder) inv.player.level.getBlockEntity(extraData.readBlockPos()));
+    this(id, inv, (BlockEntityGrinder) inv.player.level.getBlockEntity(extraData.readBlockPos()));
   }
 
   //OLD(int windowId, Level world, BlockPos pos, Inventory inv, Player player) {
-  public ContainerGrinder(int windowId, Inventory inv, TileGrinder tile) {
+  public ContainerGrinder(int windowId, Inventory inv, BlockEntityGrinder tile) {
     super(ModRegistry.MENU.get(), windowId);
     this.playerInventory = inv;
     addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));

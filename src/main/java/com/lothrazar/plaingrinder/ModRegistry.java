@@ -4,7 +4,7 @@ import com.lothrazar.plaingrinder.grind.BlockGrinder;
 import com.lothrazar.plaingrinder.grind.ContainerGrinder;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
 import com.lothrazar.plaingrinder.grind.GrindRecipe.SerializeGrinderRecipe;
-import com.lothrazar.plaingrinder.grind.TileGrinder;
+import com.lothrazar.plaingrinder.grind.BlockEntityGrinder;
 import com.lothrazar.plaingrinder.handle.BlockHandle;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
@@ -41,23 +41,15 @@ public class ModRegistry {
   public static final RegistryObject<Block> handle = BLOCKS.register("handle", () -> new BlockHandle(Block.Properties.of(Material.WOOD).strength(0.4F)));
   public static final RegistryObject<Item> igrinder = ITEMS.register("grinder", () -> new BlockItem(GRINDER.get(), new Item.Properties().tab(TAB)));
   public static final RegistryObject<Item> ihandle = ITEMS.register("handle", () -> new BlockItem(handle.get(), new Item.Properties().tab(TAB)));
-  public static final RegistryObject<BlockEntityType<TileGrinder>> TE_GRINDER = TILES.register("grinder", () -> BlockEntityType.Builder.of(TileGrinder::new, GRINDER.get()).build(null));
-
-  //  @SubscribeEvent
-  //  public static void onContainerRegistry(final RegistryEvent.Register<MenuType<?>> event) {
-  //    IForgeRegistry<MenuType<?>> r = event.getRegistry();
-  //    r.register(IForgeMenuType.create((windowId, inv, data) -> {
-  //      return new ContainerGrinder(windowId, inv.player.level, data.readBlockPos(), inv, inv.player);
-  //    }).setRegistryName("grinder"));
-  //  }
-
-  public static final RegistryObject<RecipeType<GrindRecipe>> GRINDER_RECIPE_TYPE = RECIPE_TYPES.register("grinder", () -> new RecipeType<>() {
-  });
-
-  public static final RegistryObject<SerializeGrinderRecipe> GRINDER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("grinder", SerializeGrinderRecipe::new);
-
+  //block entity and container
+  public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> TE_GRINDER = TILES.register("grinder", () -> BlockEntityType.Builder.of(BlockEntityGrinder::new, GRINDER.get()).build(null));
   public static final RegistryObject<MenuType<ContainerGrinder>> MENU = CONTAINERS.register("grinder", () -> IForgeMenuType.create(ContainerGrinder::new));
-  ///
+  //two for the recipe
+  public static final RegistryObject<RecipeType<GrindRecipe>> GRINDER_RECIPE_TYPE = RECIPE_TYPES.register("grinder", () -> new RecipeType<GrindRecipe>() {
+    //yep leave it empty its fine
+  });
+  public static final RegistryObject<SerializeGrinderRecipe> GRINDER_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register("grinder", SerializeGrinderRecipe::new);
+  //items
   public static final RegistryObject<Item> dust_coal = ITEMS.register("dust_coal", () -> new ItemDustBurnable(new Item.Properties().tab(TAB)));
   public static final RegistryObject<Item> dust_charcoal = ITEMS.register("dust_charcoal", () -> new ItemDustBurnable(new Item.Properties().tab(TAB)));
   public static final RegistryObject<Item> dust_diamond = ITEMS.register("dust_diamond", () -> new Item(new Item.Properties().tab(TAB)));

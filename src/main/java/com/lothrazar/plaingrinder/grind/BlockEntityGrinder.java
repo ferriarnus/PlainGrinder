@@ -22,7 +22,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileGrinder extends BlockEntity implements MenuProvider, Container {
+public class BlockEntityGrinder extends BlockEntity implements MenuProvider, Container {
 
   private static final int MULT_OF_MAX_STAGE_BREAKSTUFF = 4;
   public static final String NBTINV = "inv";
@@ -34,7 +34,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   private int timer = 0;
   private int emptyHits = 0;
 
-  public TileGrinder(BlockPos pos, BlockState state) {
+  public BlockEntityGrinder(BlockPos pos, BlockState state) {
     super(ModRegistry.TE_GRINDER.get(), pos, state);
   }
 
@@ -201,11 +201,11 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     inventory.insertItem(arg0, arg1, false);
   }
 
-  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
+  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, BlockEntityGrinder tileGrinder) {
     //NOOP 
   }
 
-  public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tile) {
+  public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, BlockEntityGrinder tile) {
     tile.tick();
   }
 

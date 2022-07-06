@@ -34,7 +34,7 @@ public class BlockGrinder extends BaseEntityBlock {
 
   @Override
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-    return new TileGrinder(pos, state);
+    return new BlockEntityGrinder(pos, state);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class BlockGrinder extends BaseEntityBlock {
 
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-    return createTickerHelper(type, ModRegistry.TE_GRINDER.get(), world.isClientSide ? TileGrinder::clientTick : TileGrinder::serverTick);
+    return createTickerHelper(type, ModRegistry.TE_GRINDER.get(), world.isClientSide ? BlockEntityGrinder::clientTick : BlockEntityGrinder::serverTick);
   }
 
   @Override
@@ -66,7 +66,7 @@ public class BlockGrinder extends BaseEntityBlock {
   public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
     if (state.getBlock() != newState.getBlock()) {
       BlockEntity tileentity = worldIn.getBlockEntity(pos);
-      if (tileentity instanceof TileGrinder grinder) {
+      if (tileentity instanceof BlockEntityGrinder grinder) {
         for (int i = 0; i < grinder.inputSlots.getSlots(); ++i) {
           Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), grinder.inputSlots.getStackInSlot(i));
         }

@@ -2,10 +2,11 @@
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/plain-grinder",
   "promos": {
     "1.18.2-latest": "1.2.4",
-    "1.19-latest": "1.2.4"
+    "1.19-latest": "1.2.5"
   },
   "1.19":{
-  	"1.2.4":"Ported"
+  	"1.2.4":"Ported",
+  	"1.2.5":"Fix JEI lookups for grinder recipes [MrBysco]"
   },
   "1.18.2": {
     "1.1.0": "Ported to 1.17.1.  Copper Dust added "

@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
-public class GrindRecipe implements Recipe<TileGrinder> {
+public class GrindRecipe implements Recipe<BlockEntityGrinder> {
 
   private static final Set<String> HASHES = new HashSet<>();
   public static final Set<GrindRecipe> RECIPES = new HashSet<>();
@@ -32,7 +32,7 @@ public class GrindRecipe implements Recipe<TileGrinder> {
   }
 
   @Override
-  public boolean matches(TileGrinder inv, Level worldIn) {
+  public boolean matches(BlockEntityGrinder inv, Level worldIn) {
     for (ItemStack test : input.getItems()) {
       if (matchingStacks(test, inv.inputSlots.getStackInSlot(0))) {
         return true;
@@ -48,7 +48,7 @@ public class GrindRecipe implements Recipe<TileGrinder> {
   }
 
   @Override
-  public ItemStack assemble(TileGrinder inv) {
+  public ItemStack assemble(BlockEntityGrinder inv) {
     return getResultItem();
   }
 
