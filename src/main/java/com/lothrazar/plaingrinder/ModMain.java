@@ -27,7 +27,7 @@ public class ModMain {
     IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
     ModRegistry.ITEMS.register(eventBus);
     ModRegistry.BLOCKS.register(eventBus);
-    ModRegistry.CONTAINERS.register(eventBus);
+    ModRegistry.MENUS.register(eventBus);
     ModRegistry.TILES.register(eventBus);
     ModRegistry.RECIPE_TYPES.register(eventBus);
     ModRegistry.RECIPE_SERIALIZERS.register(eventBus);

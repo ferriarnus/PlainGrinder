@@ -20,7 +20,7 @@ public class GrindEvents {
       return;
     }
     BlockPos pos = event.getPos();
-    Player player = event.getPlayer();
+    Player player = event.getEntity();
     Level world = player.getCommandSenderWorld();
     BlockState state = world.getBlockState(pos);
     if (state.getBlock() == ModRegistry.handle.get()) {

@@ -1,10 +1,10 @@
 package com.lothrazar.plaingrinder;
 
+import com.lothrazar.plaingrinder.grind.BlockEntityGrinder;
 import com.lothrazar.plaingrinder.grind.BlockGrinder;
 import com.lothrazar.plaingrinder.grind.ContainerGrinder;
 import com.lothrazar.plaingrinder.grind.GrindRecipe;
 import com.lothrazar.plaingrinder.grind.GrindRecipe.SerializeGrinderRecipe;
-import com.lothrazar.plaingrinder.grind.BlockEntityGrinder;
 import com.lothrazar.plaingrinder.handle.BlockHandle;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
@@ -26,8 +26,8 @@ public class ModRegistry {
 
   static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ModMain.MODID);
   static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ModMain.MODID);
-  static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, ModMain.MODID);
-  static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, ModMain.MODID);
+  static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ModMain.MODID);
+  static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ModMain.MODID);
   static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ModMain.MODID);
   static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, ModMain.MODID);
   public static final CreativeModeTab TAB = new CreativeModeTab(ModMain.MODID) {
@@ -43,7 +43,7 @@ public class ModRegistry {
   public static final RegistryObject<Item> ihandle = ITEMS.register("handle", () -> new BlockItem(handle.get(), new Item.Properties().tab(TAB)));
   //block entity and container
   public static final RegistryObject<BlockEntityType<BlockEntityGrinder>> TE_GRINDER = TILES.register("grinder", () -> BlockEntityType.Builder.of(BlockEntityGrinder::new, GRINDER.get()).build(null));
-  public static final RegistryObject<MenuType<ContainerGrinder>> MENU = CONTAINERS.register("grinder", () -> IForgeMenuType.create(ContainerGrinder::new));
+  public static final RegistryObject<MenuType<ContainerGrinder>> MENU = MENUS.register("grinder", () -> IForgeMenuType.create(ContainerGrinder::new));
   //two for the recipe
   public static final RegistryObject<RecipeType<GrindRecipe>> GRINDER_RECIPE_TYPE = RECIPE_TYPES.register("grinder", () -> new RecipeType<GrindRecipe>() {
     //yep leave it empty its fine
