@@ -2,6 +2,7 @@ package com.lothrazar.plaingrinder.grind;
 
 import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
+import net.minecraft.client.gui.spectator.SpectatorMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -19,17 +20,23 @@ import java.util.Set;
 
 public class GrindRecipe implements Recipe<TileGrinder> {
 
-  private static final Set<String> HASHES = new HashSet<>();
-  public static final Set<GrindRecipe> RECIPES = new HashSet<>();
+  public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
   private final ResourceLocation id;
-  public Ingredient input = Ingredient.EMPTY;
-  private ItemStack result = ItemStack.EMPTY;
+  private final Ingredient input;
+  private final ItemStack result;
+  private final float firstChance;
+  private final ItemStack optionalResult;
+  private final float optinalChance;
 
-  public GrindRecipe(ResourceLocation id, Ingredient input, ItemStack result) {
+
+  public GrindRecipe(ResourceLocation id, Ingredient input, ItemStack result, float firstChance, ItemStack optionalResult, float optinalChance) {
     super();
     this.id = id;
     this.input = input;
     this.result = result;
+    this.firstChance = firstChance;
+    this.optionalResult = optionalResult;
+    this.optinalChance = optinalChance;
   }
 
   @Override
@@ -78,7 +85,21 @@ public class GrindRecipe implements Recipe<TileGrinder> {
     return SERIALIZER;
   }
 
-  public static final SerializeGrinderRecipe SERIALIZER = new SerializeGrinderRecipe();
+  public Ingredient getInput() {
+    return this.input;
+  }
+
+  public float getFirstChance() {
+    return firstChance;
+  }
+
+  public ItemStack getOptionalResult() {
+    return optionalResult.copy();
+  }
+
+  public float getOptinalChance() {
+    return optinalChance;
+  }
 
   public static class SerializeGrinderRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GrindRecipe> {
 
@@ -93,9 +114,20 @@ public class GrindRecipe implements Recipe<TileGrinder> {
       try {
         Ingredient inputFirst = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));
         ItemStack resultStack = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-        r = new GrindRecipe(recipeId, inputFirst, resultStack);
-        addRecipe(r);
-        return r;
+        float resultChance = 1;
+        if (json.has("resultChance")) {
+          resultChance = json.get("resultChance").getAsFloat();
+        }
+        ItemStack optionalResult;
+        float optionalChance = 0;
+        if (json.has("optionalResult")) {
+          optionalResult = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "optionalResult"));
+          optionalChance = json.get("optionalChance").getAsFloat();
+        } else {
+          optionalResult = ItemStack.EMPTY;
+        }
+
+        return new GrindRecipe(recipeId, inputFirst, resultStack, resultChance, optionalResult, optionalChance);
       }
       catch (Exception e) {
         ModMain.LOGGER.error("Error loading recipe" + recipeId, e);
@@ -105,27 +137,21 @@ public class GrindRecipe implements Recipe<TileGrinder> {
 
     @Override
     public GrindRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-      GrindRecipe r = new GrindRecipe(recipeId, Ingredient.fromNetwork(buffer), buffer.readItem());
-      //server reading recipe from client or vice/versa 
-      addRecipe(r);
-      return r;
+      Ingredient input = Ingredient.fromNetwork(buffer);
+      ItemStack result = buffer.readItem();
+      float resultChance = buffer.readFloat();
+      ItemStack optional = buffer.readItem();
+      float optionalChance = buffer.readFloat();
+      return new GrindRecipe(recipeId, input, result, resultChance, optional, optionalChance);
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, GrindRecipe recipe) {
       recipe.input.toNetwork(buffer);
       buffer.writeItem(recipe.getResultItem());
+      buffer.writeFloat(recipe.firstChance);
+      buffer.writeItem(recipe.optionalResult);
+      buffer.writeFloat(recipe.optinalChance);
     }
-  }
-
-  public static boolean addRecipe(GrindRecipe r) {
-    ResourceLocation id = r.getId();
-    if (HASHES.contains(id.toString())) {
-      return false;
-    }
-    RECIPES.add(r);
-    HASHES.add(id.toString());
-    ModMain.LOGGER.info("Recipe loaded " + id.toString());
-    return true;
   }
 }

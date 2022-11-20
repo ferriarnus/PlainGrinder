@@ -27,6 +27,7 @@ public class ContainerGrinder extends AbstractContainerMenu {
     tile = (TileGrinder) world.getBlockEntity(pos);
     addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
     addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
+    addSlot(new SlotItemHandler(tile.outputSlots, 1, 129, 35));
     layoutPlayerInventorySlots(8, 84);
   }
 

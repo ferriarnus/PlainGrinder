@@ -6,5 +6,11 @@
   "result": {
     "item": "minecraft:flint",
     "count": 1
-  }
+  },
+  "resultChance": 1,
+  "optionalResult": {
+    "item": "minecraft:flint",
+    "count": 1
+  },
+  "optionalChance": 0.5
 }

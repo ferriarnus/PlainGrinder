@@ -45,6 +45,7 @@ public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
     this.blit(ms, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
     this.drawSlot(ms, 54, 34);
     this.drawSlot(ms, 108, 34);
+    this.drawSlot(ms, 128, 34);
   }
 
   protected void drawSlot(PoseStack ms, int x, int y) {

@@ -28,7 +28,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   private static final int MULT_OF_MAX_STAGE_BREAKSTUFF = 4;
   public static final String NBTINV = "inv";
   ItemStackHandler inputSlots = new ItemStackHandler(1);
-  ItemStackHandler outputSlots = new ItemStackHandler(1);
+  ItemStackHandler outputSlots = new ItemStackHandler(2);
   private ItemStackHandlerWrapper inventory = new ItemStackHandlerWrapper(inputSlots, outputSlots);
   private LazyOptional<IItemHandler> inventoryCap = LazyOptional.of(() -> inventory);
   private int stage = 0;
@@ -67,8 +67,13 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
       if (level.isClientSide == false) {
         //server so process
         this.inputSlots.getStackInSlot(0).shrink(1);
-        //and then insert it for real 
-        this.outputSlots.insertItem(0, currentRecipe.assemble(this), false);
+        //and then insert it for real
+        if (this.level.random.nextFloat() < currentRecipe.getFirstChance()) {
+          this.outputSlots.insertItem(0, currentRecipe.assemble(this), false);
+        }
+        if (this.level.random.nextFloat() < currentRecipe.getOptinalChance()) {
+          this.outputSlots.insertItem(1, currentRecipe.getOptionalResult(), false);
+        }
         //and sound on the trigger
         level.levelEvent((Player) null, 1042, worldPosition, 0);
       }
@@ -80,19 +85,14 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     ItemStack result = currentRecipe.assemble(this);
     //does it match? does it fit into the output slot 
     //insert in simulate mode. does it fit?
-    if (this.outputSlots.insertItem(0, result, true).isEmpty()) {
+    if (this.outputSlots.insertItem(0, result, true).isEmpty() && this.outputSlots.insertItem(1, currentRecipe.getOptionalResult(), true).isEmpty()) {
       return true;
     }
     return false;
   }
 
   private GrindRecipe findMatchingRecipe() {
-    for (GrindRecipe rec : GrindRecipe.RECIPES) {
-      if (rec.matches(this, level)) {
-        return rec;
-      }
-    }
-    return null;
+    return this.level.getRecipeManager().getRecipeFor(ModRecipeType.GRIND,this ,this.level).orElseGet(()-> null);
   }
 
   @Override
