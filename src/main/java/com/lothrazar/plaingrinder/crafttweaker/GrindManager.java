@@ -20,10 +20,10 @@ import org.openzen.zencode.java.ZenCodeType;
 public class GrindManager implements IRecipeManager {
 
     @ZenCodeType.Method
-    public void addRecipe(String name, IIngredient input, IItemStack result, @ZenCodeType.OptionalFloat(1) float firstChance, @ZenCodeType.Optional IItemStack optional, @ZenCodeType.OptionalFloat(0) float optionalChance) {
+    public void addRecipe(String name, IIngredient[] input, IItemStack result, @ZenCodeType.OptionalFloat(1) float firstChance, @ZenCodeType.Optional IItemStack optional, @ZenCodeType.OptionalFloat(0) float optionalChance) {
         CraftTweakerAPI.apply(new ActionAddRecipe(this,
                 new GrindRecipe(CraftTweakerConstants.rl(name),
-                        input.asVanillaIngredient(),
+                        input[0].asVanillaIngredient(),
                         result.getInternal(),
                         firstChance,
                         optional == null? ItemStack.EMPTY : optional.getInternal(),
