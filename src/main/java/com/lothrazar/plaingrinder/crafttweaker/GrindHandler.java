@@ -36,7 +36,7 @@ public class GrindHandler implements IRecipeHandler<GrindRecipe> {
     }
 
     @Override
-    public Optional<Function<ResourceLocation, GrindRecipe>> replaceIngredients(IRecipeManager manager, GrindRecipe recipe, List<IReplacementRule> rules) throws ReplacementNotSupportedException {
+    public Optional<Function<ResourceLocation, GrindRecipe>> replaceIngredients(IRecipeManager manager, GrindRecipe recipe, List<IReplacementRule> rules) {
         return IRecipeHandler.attemptReplacing(recipe.getInput(), Ingredient.class, recipe, rules).map(input ->
                 (id) -> new GrindRecipe(id, input, recipe.getResultItem(), recipe.getFirstChance(), recipe.getOptionalResult(), recipe.getOptinalChance()));
     }

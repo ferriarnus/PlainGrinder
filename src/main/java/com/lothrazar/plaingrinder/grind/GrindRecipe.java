@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class GrindRecipe implements Recipe<TileGrinder> {
@@ -99,6 +100,19 @@ public class GrindRecipe implements Recipe<TileGrinder> {
 
   public float getOptinalChance() {
     return optinalChance;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    GrindRecipe that = (GrindRecipe) o;
+    return id.equals(that.id) && input.equals(that.input);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, input);
   }
 
   public static class SerializeGrinderRecipe extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<GrindRecipe> {
