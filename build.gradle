@@ -111,6 +111,14 @@ dependencies {
     //  implementation fg.deobf("curse.maven:mystical-agriculture-246640:3152061")
     //  implementation fg.deobf("curse.maven:simple-storage-network-268495:3163007")
 
+    def ctDep = fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.100')
+    compileOnly(ctDep)
+    runtimeOnly(ctDep)
+
+    //AnnotationProcessor is here for generating docs. Check the "Generating Docs" page for more information
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors-1.18.2:2.0.0.100'
+    annotationProcessor "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    annotationProcessor ctDep
 
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -192,7 +200,7 @@ task signJar(type: SignJar, dependsOn: jar) {
 }
 
 
-build.dependsOn signJar
+//build.dependsOn signJar
 
 task copyJar(type: Copy) {
     from jar
