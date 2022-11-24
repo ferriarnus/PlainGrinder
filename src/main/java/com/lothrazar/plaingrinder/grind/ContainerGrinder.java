@@ -1,5 +1,6 @@
 package com.lothrazar.plaingrinder.grind;
 
+import com.lothrazar.plaingrinder.ConfigManager;
 import com.lothrazar.plaingrinder.ModRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,6 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerGrinder extends AbstractContainerMenu {
 
@@ -26,8 +28,18 @@ public class ContainerGrinder extends AbstractContainerMenu {
     this.playerInventory = inv;
     tile = (TileGrinder) world.getBlockEntity(pos);
     addSlot(new SlotItemHandler(tile.inputSlots, 0, 55, 35));
-    addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35));
-    addSlot(new SlotItemHandler(tile.outputSlots, 1, 129, 35));
+    addSlot(new SlotItemHandler(tile.outputSlots, 0, 109, 35) {
+      @Override
+      public boolean mayPlace(@NotNull ItemStack stack) {
+        return false;
+      }
+    });
+    addSlot(new SlotItemHandler(tile.outputSlots, 1, 129, 35) {
+      @Override
+      public boolean mayPlace(@NotNull ItemStack stack) {
+        return false;
+      }
+    });
     layoutPlayerInventorySlots(8, 84);
   }
 
@@ -101,5 +113,9 @@ public class ContainerGrinder extends AbstractContainerMenu {
     // Hotbar
     topRow += 58;
     addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
+  }
+
+  public float percentageWork() {
+    return ((float)tile.getStage())/ (ConfigManager.MAX_STAGE.get()-1);
   }
 }

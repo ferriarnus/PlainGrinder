@@ -30,11 +30,9 @@ public class GrindEvents {
         TileGrinder tile = (TileGrinder) world.getBlockEntity(pos.below());
         if (tile.canGrind()) {
           // and state
-          if (world.isClientSide == false) {
-            Direction old = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
-            world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, old.getCounterClockWise()));
-            tile.incrementGrind();
-          }
+          Direction old = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+          world.setBlockAndUpdate(pos, state.setValue(BlockStateProperties.HORIZONTAL_FACING, old.getCounterClockWise()));
+          tile.incrementGrind();
           player.swing(event.getHand());
         }
       }

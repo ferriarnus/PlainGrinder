@@ -13,9 +13,11 @@ public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
 
   public static final ResourceLocation INVENTORY = new ResourceLocation(ModMain.MODID, "textures/gui/inventory.png");
   public static final ResourceLocation SLOT = new ResourceLocation(ModMain.MODID, "textures/gui/slot.png");
+  private final ContainerGrinder container;
 
   public ScreenGrinder(ContainerGrinder screenContainer, Inventory inv, Component titleIn) {
     super(screenContainer, inv, titleIn);
+    this.container = screenContainer;
   }
 
   @Override
@@ -43,6 +45,8 @@ public class ScreenGrinder extends AbstractContainerScreen<ContainerGrinder> {
     int relX = (this.width - this.imageWidth) / 2;
     int relY = (this.height - this.imageHeight) / 2;
     this.blit(ms, relX, relY, 0, 0, this.imageWidth, this.imageHeight);
+    blit(ms, relX + 79, relY + 36, this.imageWidth+1,0, (int) (22*this.container.percentageWork()), 16);
+
     this.drawSlot(ms, 54, 34);
     this.drawSlot(ms, 108, 34);
     this.drawSlot(ms, 128, 34);

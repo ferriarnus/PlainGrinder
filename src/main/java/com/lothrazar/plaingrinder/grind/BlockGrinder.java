@@ -46,7 +46,7 @@ public class BlockGrinder extends BaseEntityBlock {
 
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-    return createTickerHelper(type, ModRegistry.T_GRINDER, world.isClientSide ? TileGrinder::clientTick : TileGrinder::serverTick);
+    return createTickerHelper(type, ModRegistry.T_GRINDER, (p_155253_, p_155254_, p_155255_, p_155256_) -> p_155256_.tick());
   }
 
   @Override
@@ -63,7 +63,6 @@ public class BlockGrinder extends BaseEntityBlock {
     return InteractionResult.SUCCESS;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
     if (state.getBlock() != newState.getBlock()) {
@@ -83,7 +82,6 @@ public class BlockGrinder extends BaseEntityBlock {
   }
 
   @Override
-  @OnlyIn(Dist.CLIENT)
   public void appendHoverText(ItemStack stack, BlockGetter worldIn, List<Component> tooltip, TooltipFlag flagIn) {
     TranslatableComponent t = new TranslatableComponent(getDescriptionId() + ".tooltip");
     tooltip.add(t.withStyle(ChatFormatting.GRAY));

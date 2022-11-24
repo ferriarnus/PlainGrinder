@@ -26,11 +26,25 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileGrinder extends BlockEntity implements MenuProvider, Container {
 
   private static final int MULT_OF_MAX_STAGE_BREAKSTUFF = 4;
-  public static final String NBTINV = "inv";
-  ItemStackHandler inputSlots = new ItemStackHandler(1);
+  public static final String NBTINVIN = "invinput";
+  public static final String NBTINVout = "invoutput";
+  private GrindRecipe currentRecipe;
+  ItemStackHandler inputSlots = new ItemStackHandler(1) {
+    @Override
+    protected void onContentsChanged(int slot) {
+      super.onContentsChanged(slot);
+      currentRecipe = TileGrinder.this.findMatchingRecipe();
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+      super.deserializeNBT(nbt);
+      currentRecipe = TileGrinder.this.findMatchingRecipe();
+    }
+  };
   ItemStackHandler outputSlots = new ItemStackHandler(2);
-  private ItemStackHandlerWrapper inventory = new ItemStackHandlerWrapper(inputSlots, outputSlots);
-  private LazyOptional<IItemHandler> inventoryCap = LazyOptional.of(() -> inventory);
+  private LazyOptional<IItemHandler> inventoryInputCap = LazyOptional.of(() -> inputSlots);
+  private LazyOptional<IItemHandler> inventoryOutputCap = LazyOptional.of(() -> outputSlots);
   private int stage = 0;
   private int timer = 0;
   private int emptyHits = 0;
@@ -39,7 +53,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     super(ModRegistry.T_GRINDER, pos, state);
   }
 
-  private void tick() {
+  void tick() {
     timer--;
     if (timer < 0) {
       timer = 0;
@@ -60,7 +74,6 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     if (input.isEmpty()) {
       return;
     }
-    GrindRecipe currentRecipe = this.findMatchingRecipe();
     if (currentRecipe != null && this.tryProcessRecipe(currentRecipe)) {
       //we did it
       //pay all costs, RF etc
@@ -97,7 +110,8 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   @Override
   public void load(CompoundTag tag) {
-    inventory.deserializeNBT(tag.getCompound(NBTINV));
+    inputSlots.deserializeNBT(tag.getCompound(NBTINVIN));
+    outputSlots.deserializeNBT(tag.getCompound(NBTINVout));
     stage = tag.getInt("grindstage");
     timer = tag.getInt("timer");
     emptyHits = tag.getInt("emptyHits");
@@ -107,17 +121,24 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   @Override
   public void saveAdditional(CompoundTag tag) {
     super.saveAdditional(tag);
-    tag.put(NBTINV, inventory.serializeNBT());
+    tag.put(NBTINVIN, inputSlots.serializeNBT());
+    tag.put(NBTINVout, outputSlots.serializeNBT());
     tag.putInt("grindstage", stage);
     tag.putInt("timer", timer);
     tag.putInt("emptyHits", emptyHits);
   }
 
+  public int getStage() {
+    return stage;
+  }
+
   @Override
   public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-        && ConfigManager.AUTOMATION_ALLOWED.get()) {
-      return inventoryCap.cast();
+    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && ConfigManager.AUTOMATION_ALLOWED.get()) {
+      if (side == Direction.DOWN) {
+        return inventoryOutputCap.cast();
+      }
+      return inventoryInputCap.cast();
     }
     return super.getCapability(cap, side);
   }
@@ -133,11 +154,6 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   public void incrementGrind() {
-    timer = ConfigManager.TIMER_COOLDOWN.get(); //restart to allow another rotation
-    stage++;
-    if (stage > ConfigManager.MAX_STAGE.get()) {
-      stage = ConfigManager.MAX_STAGE.get();
-    }
     if (this.inputIsEmpty()) {
       //only track empty if its breakable
       this.emptyHits++;
@@ -148,6 +164,15 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     }
     else {
       this.emptyHits = 0;
+    }
+    if (this.currentRecipe == null) {
+      this.stage = 0;
+      return;
+    }
+    timer = ConfigManager.TIMER_COOLDOWN.get(); //restart to allow another rotation
+    stage++;
+    if (stage > ConfigManager.MAX_STAGE.get()) {
+      stage = ConfigManager.MAX_STAGE.get();
     }
   }
 
@@ -205,12 +230,5 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   @Override
   public void setItem(int arg0, ItemStack arg1) {
-  }
-
-  public static void clientTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tileGrinder) {
-  }
-
-  public static <E extends BlockEntity> void serverTick(Level level, BlockPos blockPos, BlockState blockState, TileGrinder tile) {
-    tile.tick();
   }
 }

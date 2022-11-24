@@ -3,6 +3,7 @@ package com.lothrazar.plaingrinder.grind;
 import com.google.gson.JsonObject;
 import com.lothrazar.plaingrinder.ModMain;
 import net.minecraft.client.gui.spectator.SpectatorMenu;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -86,8 +87,9 @@ public class GrindRecipe implements Recipe<TileGrinder> {
     return SERIALIZER;
   }
 
-  public Ingredient getInput() {
-    return this.input;
+  @Override
+  public NonNullList<Ingredient> getIngredients() {
+    return NonNullList.withSize(1, this.input);
   }
 
   public float getFirstChance() {
@@ -161,7 +163,7 @@ public class GrindRecipe implements Recipe<TileGrinder> {
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, GrindRecipe recipe) {
-      recipe.input.toNetwork(buffer);
+      recipe.getIngredients().get(0).toNetwork(buffer);
       buffer.writeItem(recipe.getResultItem());
       buffer.writeFloat(recipe.firstChance);
       buffer.writeItem(recipe.optionalResult);

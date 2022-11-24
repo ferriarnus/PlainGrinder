@@ -9,6 +9,7 @@ import com.lothrazar.plaingrinder.grind.ScreenGrinder;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -23,6 +24,7 @@ public class PluginJEI implements IModPlugin {
 
   private static final int PLAYER_INV_SIZE = 4 * 9;
   private static final ResourceLocation ID = new ResourceLocation(ModMain.MODID, "jei");
+  public static final RecipeType<GrindRecipe> GRIND_TYPE = new RecipeType<>(ID, GrindRecipe.class);
 
   @Override
   public ResourceLocation getPluginUid() {
@@ -31,7 +33,7 @@ public class PluginJEI implements IModPlugin {
 
   @Override
   public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-    registration.addRecipeCatalyst(new ItemStack(ModRegistry.B_GRINDER.asItem()), RecipeCat.ID);
+    registration.addRecipeCatalyst(new ItemStack(ModRegistry.B_GRINDER), GRIND_TYPE);
   }
 
   @Override
@@ -42,14 +44,12 @@ public class PluginJEI implements IModPlugin {
 
   @Override
   public void registerRecipes(IRecipeRegistration registry) {
-    registry.addRecipes(Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeType.GRIND), RecipeCat.ID);
+    registry.addRecipes(GRIND_TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeType.GRIND).stream().toList());
   }
 
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registry) {
-    registry.addRecipeClickArea(ScreenGrinder.class,
-        72, 10,
-        34, 36, RecipeCat.ID);
+    registry.addRecipeClickArea(ScreenGrinder.class, 72, 10, 34, 36, GRIND_TYPE);
   }
 
   @Override
