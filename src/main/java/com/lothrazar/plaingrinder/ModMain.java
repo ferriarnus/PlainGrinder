@@ -24,7 +24,6 @@ public class ModMain {
 
   public ModMain() {
     ConfigManager.setup();
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
     //https://github.com/Minecraft-Forge-Tutorials/Custom-Json-Recipes/blob/master/src/main/java/net/darkhax/customrecipeexample/CustomRecipesMod.java
     FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(RecipeSerializer.class, ModMain::registerRecipeSerializers);
@@ -33,10 +32,6 @@ public class ModMain {
   //todo: mekanism and thermal built in support
   //3x ores in mystical ag - direct recipes
   //ex nihilo ore chunks
-  private void setup(final FMLCommonSetupEvent event) {
-    //now all blocks/items exist  
-    MinecraftForge.EVENT_BUS.register(new GrindEvents());
-  }
 
   private void setupClient(final FMLClientSetupEvent event) {
     //for client side only setup

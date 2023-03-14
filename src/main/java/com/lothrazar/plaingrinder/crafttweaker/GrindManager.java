@@ -20,7 +20,7 @@ import org.openzen.zencode.java.ZenCodeType;
 public class GrindManager implements IRecipeManager {
 
     @ZenCodeType.Method
-    public void addRecipe(String name, IIngredient[] input, IItemStack result, @ZenCodeType.OptionalFloat(1) float firstChance, @ZenCodeType.Optional IItemStack optional, @ZenCodeType.OptionalFloat(0) float optionalChance) {
+    public void addRecipe(String name, IIngredient[] input, IItemStack result, int turns, @ZenCodeType.OptionalFloat(1) float firstChance, @ZenCodeType.Optional IItemStack optional, @ZenCodeType.OptionalFloat(0) float optionalChance) {
         if (input.length != 1) {
             CraftTweakerAPI.LOGGER.error("Wrong amount of ingredients for grinder recipe: Expected 1, found " + input.length + ".");
             return;
@@ -31,7 +31,8 @@ public class GrindManager implements IRecipeManager {
                         result.getInternal(),
                         firstChance,
                         optional == null? ItemStack.EMPTY : optional.getInternal(),
-                        optionalChance)
+                        optionalChance,
+                        turns)
                 )
         );
     }

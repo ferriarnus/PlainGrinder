@@ -65,7 +65,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   public boolean canProcessOre() {
-    return stage == ConfigManager.MAX_STAGE.get();
+    return this.currentRecipe == null? false : stage == this.currentRecipe.getTurns();
   }
 
   private void doProcess() {
@@ -105,7 +105,12 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   private GrindRecipe findMatchingRecipe() {
-    return this.level.getRecipeManager().getRecipeFor(ModRecipeType.GRIND,this ,this.level).orElseGet(()-> null);
+    if (this.level == null) return null;
+    GrindRecipe recipe = this.level.getRecipeManager().getRecipeFor(ModRecipeType.GRIND,this ,this.level).orElseGet(()-> null);
+    if (recipe == null || !recipe.equals(currentRecipe)) {
+      this.stage = 0;
+    }
+    return recipe;
   }
 
   @Override
@@ -130,6 +135,10 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   public int getStage() {
     return stage;
+  }
+
+  public int getMaxStage() {
+    return this.currentRecipe != null? this.currentRecipe.getTurns() : 1;
   }
 
   @Override
@@ -158,7 +167,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
       //only track empty if its breakable
       this.emptyHits++;
       if (ConfigManager.BREAKABLE_HANDLE.get() &&
-          this.emptyHits > ConfigManager.MAX_STAGE.get() * MULT_OF_MAX_STAGE_BREAKSTUFF) {
+          this.emptyHits > (this.currentRecipe != null ? this.currentRecipe.getTurns() : 0 )* MULT_OF_MAX_STAGE_BREAKSTUFF) {
         this.breakHandleAboveMe();
       }
     }
@@ -166,13 +175,13 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
       this.emptyHits = 0;
     }
     if (this.currentRecipe == null) {
-      this.stage = 0;
+      currentRecipe = findMatchingRecipe();
       return;
     }
     timer = ConfigManager.TIMER_COOLDOWN.get(); //restart to allow another rotation
     stage++;
-    if (stage > ConfigManager.MAX_STAGE.get()) {
-      stage = ConfigManager.MAX_STAGE.get();
+    if (stage > this.currentRecipe.getTurns()) {
+      stage = this.currentRecipe.getTurns();
     }
   }
 

@@ -4,10 +4,12 @@ buildscript {
         //    maven { url = 'https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
+        maven { url = 'https://maven.parchmentmc.org' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7.+'
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -16,6 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 //apply plugin: 'checkstyle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 import net.minecraftforge.gradle.common.tasks.SignJar
 
@@ -40,7 +43,7 @@ minecraft {
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
 
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -121,6 +124,9 @@ dependencies {
     annotationProcessor "net.minecraftforge:forge:${mc_version}-${forge_version}"
     annotationProcessor ctDep
 
+    implementation(fg.deobf("maven.modrinth:create:1.18.2-0.5.0.e"))
+    implementation(fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}"))
+
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -149,6 +155,14 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
+    maven { url = "https://maven.tterrag.com/" }
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

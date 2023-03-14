@@ -17,7 +17,7 @@ public class ContainerGrinder extends AbstractContainerMenu {
 
   public static final int PLAYERSIZE = 4 * 9;
   protected int startInv = 0;
-  protected int endInv = 2;
+  protected int endInv = 3;
   private TileGrinder tile;
   protected Player playerEntity;
   protected Inventory playerInventory;
@@ -55,9 +55,9 @@ public class ContainerGrinder extends AbstractContainerMenu {
   @Override
   public ItemStack quickMoveStack(Player playerIn, int index) {
     try {
-      //if last machine slot is 17, endInv is 18
+      //if last machine slot is 18, endInv is 19
       int playerStart = endInv;
-      int playerEnd = endInv + PLAYERSIZE; //53 = 17 + 36  
+      int playerEnd = endInv + PLAYERSIZE; //54 = 18 + 36
       //standard logic based on start/end
       ItemStack itemstack = ItemStack.EMPTY;
       Slot slot = this.slots.get(index);
@@ -116,6 +116,6 @@ public class ContainerGrinder extends AbstractContainerMenu {
   }
 
   public float percentageWork() {
-    return ((float)tile.getStage())/ (ConfigManager.MAX_STAGE.get()-1);
+    return ((float)tile.getStage())/ (  tile.getMaxStage());
   }
 }

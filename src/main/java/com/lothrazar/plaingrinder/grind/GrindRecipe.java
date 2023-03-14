@@ -1,6 +1,7 @@
 package com.lothrazar.plaingrinder.grind;
 
 import com.google.gson.JsonObject;
+import com.lothrazar.plaingrinder.ConfigManager;
 import com.lothrazar.plaingrinder.ModMain;
 import net.minecraft.client.gui.spectator.SpectatorMenu;
 import net.minecraft.core.NonNullList;
@@ -29,9 +30,10 @@ public class GrindRecipe implements Recipe<TileGrinder> {
   private final float firstChance;
   private final ItemStack optionalResult;
   private final float optinalChance;
+  private final int turns;
 
 
-  public GrindRecipe(ResourceLocation id, Ingredient input, ItemStack result, float firstChance, ItemStack optionalResult, float optinalChance) {
+  public GrindRecipe(ResourceLocation id, Ingredient input, ItemStack result, float firstChance, ItemStack optionalResult, float optinalChance, int turns) {
     super();
     this.id = id;
     this.input = input;
@@ -39,6 +41,7 @@ public class GrindRecipe implements Recipe<TileGrinder> {
     this.firstChance = firstChance;
     this.optionalResult = optionalResult;
     this.optinalChance = optinalChance;
+    this.turns = turns;
   }
 
   @Override
@@ -104,6 +107,10 @@ public class GrindRecipe implements Recipe<TileGrinder> {
     return optinalChance;
   }
 
+  public int getTurns() {
+    return turns;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -142,8 +149,12 @@ public class GrindRecipe implements Recipe<TileGrinder> {
         } else {
           optionalResult = ItemStack.EMPTY;
         }
+        int turns = ConfigManager.MAX_STAGE.get();
+        if (json.has("turns")) {
+          turns = json.get("turns").getAsInt();
+        }
 
-        return new GrindRecipe(recipeId, inputFirst, resultStack, resultChance, optionalResult, optionalChance);
+        return new GrindRecipe(recipeId, inputFirst, resultStack, resultChance, optionalResult, optionalChance, turns);
       }
       catch (Exception e) {
         ModMain.LOGGER.error("Error loading recipe" + recipeId, e);
@@ -158,7 +169,8 @@ public class GrindRecipe implements Recipe<TileGrinder> {
       float resultChance = buffer.readFloat();
       ItemStack optional = buffer.readItem();
       float optionalChance = buffer.readFloat();
-      return new GrindRecipe(recipeId, input, result, resultChance, optional, optionalChance);
+      int turns = buffer.readInt();
+      return new GrindRecipe(recipeId, input, result, resultChance, optional, optionalChance, turns);
     }
 
     @Override
@@ -168,6 +180,7 @@ public class GrindRecipe implements Recipe<TileGrinder> {
       buffer.writeFloat(recipe.firstChance);
       buffer.writeItem(recipe.optionalResult);
       buffer.writeFloat(recipe.optinalChance);
+      buffer.writeInt(recipe.turns);
     }
   }
 }
