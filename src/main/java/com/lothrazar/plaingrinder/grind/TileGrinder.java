@@ -8,6 +8,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,6 +25,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 public class TileGrinder extends BlockEntity implements MenuProvider, Container {
 
@@ -33,12 +37,6 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     @Override
     protected void onContentsChanged(int slot) {
       super.onContentsChanged(slot);
-      currentRecipe = TileGrinder.this.findMatchingRecipe();
-    }
-
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
-      super.deserializeNBT(nbt);
       currentRecipe = TileGrinder.this.findMatchingRecipe();
     }
   };
@@ -54,6 +52,9 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
   }
 
   void tick() {
+    if (currentRecipe == null) {
+      currentRecipe = this.level.getRecipeManager().getRecipeFor(ModRecipeType.GRIND,this ,this.level).orElse(null);
+    }
     timer--;
     if (timer < 0) {
       timer = 0;
@@ -77,7 +78,7 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
     if (currentRecipe != null && this.tryProcessRecipe(currentRecipe)) {
       //we did it
       //pay all costs, RF etc
-      if (level.isClientSide == false) {
+      if (!level.isClientSide) {
         //server so process
         this.inputSlots.getStackInSlot(0).shrink(1);
         //and then insert it for real
@@ -199,6 +200,21 @@ public class TileGrinder extends BlockEntity implements MenuProvider, Container 
 
   public boolean canGrind() {
     return timer == 0;
+  }
+
+  @Override
+  public void handleUpdateTag(CompoundTag tag) {
+    this.load(tag);
+  }
+
+  @Override
+  public CompoundTag getUpdateTag() {
+    return this.saveWithoutMetadata();
+  }
+
+  @Override
+  public Packet<ClientGamePacketListener> getUpdatePacket() {
+    return ClientboundBlockEntityDataPacket.create(this);
   }
 
   /******** Fakeout stuff for IRecipe *********************/
