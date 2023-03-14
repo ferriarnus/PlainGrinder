@@ -116,6 +116,6 @@ public class ContainerGrinder extends AbstractContainerMenu {
   }
 
   public float percentageWork() {
-    return ((float)tile.getStage())/ (  tile.getMaxStage());
+    return ((float)tile.getStage())/ (tile.getMaxStage());
   }
 }

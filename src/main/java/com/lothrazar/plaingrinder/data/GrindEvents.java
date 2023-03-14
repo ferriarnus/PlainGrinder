@@ -1,7 +1,6 @@
 package com.lothrazar.plaingrinder.data;
 
 import com.lothrazar.plaingrinder.ModRegistry;
-import com.lothrazar.plaingrinder.create.CreateCompat;
 import com.lothrazar.plaingrinder.grind.TileGrinder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
@@ -29,8 +27,8 @@ public class GrindEvents {
     Player player = event.getPlayer();
     Level world = player.getCommandSenderWorld();
     BlockState state = world.getBlockState(pos);
-    if (ModList.get().isLoaded("create")) {
-      CreateCompat.handcrank(world.getBlockEntity(pos.below()), state);
+    if (state.is(ModRegistry.CRANKS) && world.getBlockEntity(pos.below()) instanceof TileGrinder grinder) {
+      grinder.incrementGrind();
     }
     if (state.getBlock() == ModRegistry.B_HANDLE) {
       BlockState below = world.getBlockState(pos.below());

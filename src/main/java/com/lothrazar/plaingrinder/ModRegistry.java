@@ -4,6 +4,9 @@ import com.lothrazar.plaingrinder.grind.BlockGrinder;
 import com.lothrazar.plaingrinder.grind.ContainerGrinder;
 import com.lothrazar.plaingrinder.grind.TileGrinder;
 import com.lothrazar.plaingrinder.handle.BlockHandle;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -74,4 +77,6 @@ public class ModRegistry {
     r.register(new ItemDustBurnable(new Item.Properties().tab(GROUP)).setRegistryName("dust_charcoal"));
     r.register(new Item(new Item.Properties().tab(GROUP)).setRegistryName("dust_quartz"));
   }
+
+  public static final TagKey<Block> CRANKS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(ModMain.MODID, "cranks"));
 }

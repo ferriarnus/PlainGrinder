@@ -127,6 +127,9 @@ dependencies {
     implementation(fg.deobf("maven.modrinth:create:1.18.2-0.5.0.e"))
     implementation(fg.deobf("com.jozufozu.flywheel:flywheel-forge-${mc_version}:${flywheel_version}"))
 
+    implementation(fg.deobf("curse.maven:supplementaries-412082:4381350"))
+    implementation(fg.deobf("curse.maven:selene-499980:3842421"))
+
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -150,10 +153,8 @@ repositories {
     }
     maven { url = 'https://maven.blamejared.com' }
     maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
+        url = "https://www.cursemaven.com"
+        allowInsecureProtocol = true
     }
     maven {
         name = "Modrinth"
